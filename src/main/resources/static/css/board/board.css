@@ -1,0 +1,104 @@
+button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 1rem;
+}
+
+button:hover {
+    background-color: #357abd;
+}
+
+.board-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.board-table thead {
+    background-color: #f3f6f9;
+    font-weight: 600;
+}
+
+.board-table th, .board-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.board-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.board-table a {
+    color: #4a90e2;
+    text-decoration: none;
+}
+
+.board-table a:hover {
+    text-decoration: underline;
+}
+
+.board-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0 0.5rem;
+}
+
+.board-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.board-title .count {
+  font-size: 1rem;
+  color: #666;
+  margin-left: 0.5rem;
+}
+
+.board-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.search-input {
+  padding: 0.4rem 0.6rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 180px;
+  transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+.btn-write {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.1rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-write:hover {
+  background-color: #357abd;
+}
+
+.btn-group-right {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}

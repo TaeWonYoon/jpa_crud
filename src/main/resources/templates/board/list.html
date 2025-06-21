@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/layout}"
+>
+<head>
+    <title>메인 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/board/board.css}" />
+</head>
+<body>
+
+<header>
+    <div>내 스터디 로고</div>
+</header>
+
+<div layout:fragment="content">
+    <!-- 네비게이션 -->
+    <div class="sidebar" th:replace="fragments/navigation :: nav"></div>
+
+    <div class="container" style="padding-top: 80px; padding-bottom: 60px;">
+
+        <section class="content">
+            <!-- 1. 제목 헤더 -->
+            <h3 class="mb-3">게시글 리스트</h3>
+
+            <!-- 검색조건 테이블 -->
+            <form>
+                <table class="table table-bordered table-sm">
+                    <tbody>
+                    <tr>
+                        <th style="width: 120px;">작성자</th>
+                        <td><input type="text" class="form-control form-control-sm" name="author" /></td>
+                        <th style="width: 120px;">제목</th>
+                        <td><input type="text" class="form-control form-control-sm" name="title" /></td>
+                    </tr>
+                    <tr>
+                        <th>기간</th>
+                        <td colspan="3">
+                            <input type="date" class="form-control form-control-sm d-inline-block" name="startDate" style="width: 150px;" />
+                            ~
+                            <input type="date" class="form-control form-control-sm d-inline-block" name="endDate" style="width: 150px;" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>상태</th>
+                        <td>
+                            <select class="form-control form-control-sm" name="status">
+                                <option value="">전체</option>
+                                <option value="open">공개</option>
+                                <option value="close">비공개</option>
+                            </select>
+                        </td>
+                        <th>기타</th>
+                        <td><input type="text" class="form-control form-control-sm" name="etc" /></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="btn-group-right">
+                    <button type="button" class="btn btn-primary btn-sm mr-3" onclick="boardWrite()">글쓰기</button>
+                    <button type="submit" class="btn btn-secondary btn-sm mr-2">조회</button>
+                </div>
+            </form>
+            <span>총 120 건</span>
+            <table class="table table-hover board-table">
+                <thead class="thead-light">
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>작성일</th>
+                        <th>조회수</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="board : ${boardList}">
+                        <td th:text="${board.id}">1</td>
+                        <td><a th:href="@{'/board/view/' + ${board.title}}" th:text="${board.title}">게시글 제목</a></td>
+                        <td th:text="${board.content}">작성자</td>
+                        <td th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd')}"></td>
+                        <td th:text="${board.views}">조회수</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</div>
+
+<footer>
+    © 2025 스터디 © All rights reserved.
+</footer>
+
+<script>
+    function boardList() {
+      location.href = "/board/write";
+    }
+</script>
+
+</body>
+</html>
+
+
+

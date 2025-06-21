@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- templates/fragments/header.html -->
+<!-- fragments/navigation.html -->
+<nav class="sidebar" th:fragment="nav">
+  <ul>
+    <li><a th:href="@{/study/introduction}">스터디 소개</a></li>
+    <li><a th:href="@{/study/schedule}">일정 안내</a></li>
+    <li><a th:href="@{/study/resources}">학습 자료</a></li>
+    <li><a th:href="@{/study/contact}">문의하기</a></li>
+  </ul>
+</nav>
+</html>
