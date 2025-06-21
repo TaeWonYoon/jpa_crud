@@ -27,8 +27,7 @@ public class BoardEntity {
     /*
     @Column
     private int createdId; //등록자 아이디
-    */
-
+*/
     @Column
     private int updatedId; //수정자 아이디
 

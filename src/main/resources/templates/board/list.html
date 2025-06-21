@@ -75,8 +75,8 @@
                 <tbody>
                     <tr th:each="board : ${boardList}">
                         <td th:text="${board.id}">1</td>
-                        <td><a th:href="@{'/board/view/' + ${board.title}}" th:text="${board.title}">게시글 제목</a></td>
-                        <td th:text="${board.content}">작성자</td>
+                        <td><a th:href="@{'/board/view/' + ${board.id}}" th:text="${board.title}">게시글 제목</a></td>
+                        <td th:text="${board.authorName}">작성자</td>
                         <td th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd')}"></td>
                         <td th:text="${board.views}">조회수</td>
                     </tr>
@@ -84,17 +84,14 @@
             </table>
         </section>
     </div>
+    <script>
+        function boardWrite() {
+          location.href = "/board/write";
+        }
+    </script>
 </div>
 
-<footer>
-    © 2025 스터디 © All rights reserved.
-</footer>
 
-<script>
-    function boardList() {
-      location.href = "/board/write";
-    }
-</script>
 
 </body>
 </html>
