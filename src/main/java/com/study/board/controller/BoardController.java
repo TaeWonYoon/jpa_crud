@@ -8,12 +8,18 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Map;
 
 
 @Controller
@@ -30,10 +36,21 @@ public class BoardController {
     private FileService fileService;
 
     @GetMapping("/list")
-    public String list(Model model) {
+    public String list(Model model,
+                       @RequestParam(required = false) String title,
+                       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+                       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+                       @PageableDefault(size = 10, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable) {
         log.info("########### BoardController GET list() start ###########");
-        log.info("boardService.boardList() == {} ", boardService.boardList());
-        model.addAttribute("boardList", boardService.boardList());
+        Map<String, Object> result = boardService.boardList(title, startDate, endDate, pageable);
+
+        model.addAttribute("boardList", result.get("boardList"));
+        model.addAttribute("page", result.get("page"));
+
+        // 검색조건 유지
+        model.addAttribute("title", title);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
 
         return "board/list";
     }
@@ -60,7 +77,9 @@ public class BoardController {
     @GetMapping("/view/{id}")
     public String boardView(@PathVariable Long id, Model model) {
         log.info("########### BoardController GET boardView() start ###########");
-        BoardDTO board = boardService.getBoardById(id);
+        boardService.increaseViews(id); //조회수 증가
+
+        BoardDTO board = boardService.getBoardById(id); //게시글 조회
 
         if (board == null) {
             return "redirect:/board/list";
@@ -74,22 +93,36 @@ public class BoardController {
         return "board/view";  // templates/board/view.html 뷰 이름
     }
 
-    /*
+
     // 글 수정 폼
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable Long id, Model model) {
-        model.addAttribute("board", boardService.findById(id));
+        log.info("########### BoardController GET editForm() start ###########");
+        BoardDTO board = boardService.getBoardById(id);
+
+        if (board == null) {
+            return "redirect:/board/list";
+        }
+
+        FileDTO boardFile = fileService.getFileByTableAndId("board", id.toString());
+
+        model.addAttribute("board", board);
+        model.addAttribute("boardFile", boardFile);
         return "board/edit";
     }
 
+
     // 글 수정 처리
-    @PostMapping("/edit/{id}")
-    public String edit(@PathVariable Long id, @ModelAttribute Board board) {
-        board.setId(id);
-        boardService.save(board);
-        return "redirect:/board/list";
+    @PutMapping("/edit/{id}")
+    public String edit(@PathVariable Long id,
+                       @ModelAttribute BoardDTO boardDTO,
+                       @RequestParam(value = "file", required = false) MultipartFile file) {
+        log.info("########### BoardController PostMapping edit() start ###########");
+        boardService.updateBoard(id, boardDTO, file);
+        return "redirect:/board/view/" + id;
     }
 
+    /*
     // 글 삭제
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {

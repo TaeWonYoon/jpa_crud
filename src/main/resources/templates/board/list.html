@@ -11,7 +11,7 @@
 <body>
 
 <header>
-    <div>내 스터디 로고</div>
+    <div>리스트</div>
 </header>
 
 <div layout:fragment="content">
@@ -29,39 +29,37 @@
                 <table class="table table-bordered table-sm">
                     <tbody>
                     <tr>
-                        <th style="width: 120px;">작성자</th>
-                        <td><input type="text" class="form-control form-control-sm" name="author" /></td>
                         <th style="width: 120px;">제목</th>
-                        <td><input type="text" class="form-control form-control-sm" name="title" /></td>
-                    </tr>
-                    <tr>
-                        <th>기간</th>
-                        <td colspan="3">
-                            <input type="date" class="form-control form-control-sm d-inline-block" name="startDate" style="width: 150px;" />
+                        <td><input type="text" class="form-control form-control-sm" name="title" th:value="${title}" /></td>
+                        <th>작성일</th>
+                        <td>
+                            <input type="date" class="form-control form-control-sm d-inline-block" name="startDate" style="width: 150px;" th:value="${#temporals.format(startDate, 'yyyy-MM-dd')}" />
                             ~
-                            <input type="date" class="form-control form-control-sm d-inline-block" name="endDate" style="width: 150px;" />
+                            <input type="date" class="form-control form-control-sm d-inline-block" name="endDate" style="width: 150px;"  th:value="${#temporals.format(endDate, 'yyyy-MM-dd')}" />
                         </td>
                     </tr>
                     <tr>
+
+                    </tr>
+                    <tr>
                         <th>상태</th>
-                        <td>
+                        <td colspan="3">
                             <select class="form-control form-control-sm" name="status">
                                 <option value="">전체</option>
                                 <option value="open">공개</option>
                                 <option value="close">비공개</option>
                             </select>
                         </td>
-                        <th>기타</th>
-                        <td><input type="text" class="form-control form-control-sm" name="etc" /></td>
                     </tr>
                     </tbody>
                 </table>
                 <div class="btn-group-right">
                     <button type="button" class="btn btn-primary btn-sm mr-3" onclick="boardWrite()">글쓰기</button>
-                    <button type="submit" class="btn btn-secondary btn-sm mr-2">조회</button>
+                    <button type="submit" class="btn btn-secondary btn-sm mr-2">검색</button>
+                    <button type="button" class="btn btn-warning btn-sm mr-2" th:onclick="location.href='/board/list'">초기화</button>
                 </div>
             </form>
-            <span>총 120 건</span>
+            <span>총 <span th:text="${page.totalElements}">0</span> 건</span>
             <table class="table table-hover board-table">
                 <thead class="thead-light">
                     <tr>
@@ -82,6 +80,38 @@
                     </tr>
                 </tbody>
             </table>
+            <!-- 페이지네이션 -->
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+
+                    <!-- 이전 페이지 -->
+                    <li class="page-item" th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/board/list(page=${page.number - 1}, title=${param.title}, startDate=${startDate}, endDate=${endDate})}"
+                           aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    <!-- 번호 -->
+                    <li class="page-item"
+                        th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+                        th:classappend="${i == page.number} ? 'active'">
+                        <a class="page-link"
+                           th:href="@{/board/list(page=${i}, title=${title}, startDate=${startDate}, endDate=${endDate})}"
+                           th:text="${i + 1}">1</a>
+                    </li>
+
+                    <!-- 다음 페이지 -->
+                    <li class="page-item" th:classappend="${page.hasNext()} ? '' : 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/board/list(page=${page.number + 1}, title=${param.title}, startDate=${startDate}, endDate=${endDate})}"
+                           aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </section>
     </div>
     <script>

@@ -11,17 +11,23 @@
     <h2 class="mb-4">게시글 상세조회</h2>
 
     <div class="mb-3">
-        <label class="form-label"><strong>제목:</strong></label>
+        <label class="form-label"><strong>제목</strong></label>
         <p class="form-control-plaintext" th:text="${board.title}">게시글 제목</p>
     </div>
 
     <div class="mb-3">
-        <label class="form-label"><strong>내용:</strong></label>
+        <label class="form-label"><strong>내용</strong></label>
         <p class="form-control-plaintext" th:text="${board.content}" style="white-space: pre-wrap;">게시글 내용</p>
     </div>
 
+    <!-- 조회수 -->
+    <div class="mb-3">
+        <label class="form-label"><strong>조회수</strong></label>
+        <p class="form-control-plaintext" th:text="${board.views}">0</p>
+    </div>
+
     <div class="mb-3" th:if="${boardFile != null}">
-        <label class="form-label"><strong>첨부파일:</strong></label>
+        <label class="form-label"><strong>첨부파일</strong></label>
 
         <div th:if="${#strings.startsWith(boardFile.fileExt.toLowerCase(), '.png') or
                     #strings.startsWith(boardFile.fileExt.toLowerCase(), '.jpg') or
@@ -40,10 +46,9 @@
         </p>
     </div>
 
-    <div class="d-flex justify-content-end gap-2">
+    <div class="text-right">
+        <a th:href="@{'/board/edit/' + ${board.id}}" class="btn btn-primary">수정</a>
         <a th:href="@{/board/list}" class="btn btn-secondary">목록</a>
-        <!-- 수정 버튼이 필요하면 활성화 -->
-        <!-- <a th:href="@{'/board/edit/' + ${board.id}}" class="btn btn-primary">수정</a> -->
     </div>
 
 </div>

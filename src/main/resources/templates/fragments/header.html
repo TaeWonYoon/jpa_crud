@@ -3,11 +3,11 @@
 <!-- templates/fragments/header.html -->
 <div th:fragment="header">
   <header class="bg-dark text-white py-2 px-3 d-flex align-items-center justify-content-between">
-    <div class="logo h4 font-weight-bold m-0">
+    <div class="logo h4 font-weight-bold m-0" th:onclick="location.href='/'">
       MySiteLogo
     </div>
     <nav>
-      <a href="/signup" class="text-white font-weight-bold ml-3">회원가입</a>
+      <a class="text-white font-weight-bold ml-3" th:href="@{'/user/register'}">회원가입</a>
       <a href="/login" class="text-white font-weight-bold ml-3">로그인</a>
       <a href="/board/list" class="text-white font-weight-bold ml-3">게시판</a>
       <span class="welcome ml-3 font-italic">
