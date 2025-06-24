@@ -2,18 +2,18 @@ package com.study.User.entity;
 
 import com.study.User.model.UserDTO;
 import com.study.board.model.BoardDTO;
+import com.study.config.SecurityConfig;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
-@Table(name = "user")
+@Data
 @NoArgsConstructor
+@ToString
+@Table(name = "user")
 public class UserEntity {
 
     @Id // pk 컬럼, 지정
@@ -53,9 +53,15 @@ public class UserEntity {
 
 
     public static UserEntity toSaveEntity(UserDTO dto) {
-        UserEntity entity = new UserEntity();
-        entity.setId(dto.getId());
-        return entity;
+        SecurityConfig securityConfig = new SecurityConfig();
+        UserEntity userEntity = new UserEntity();
+        userEntity.setLoginId(dto.getLoginId());
+        userEntity.setPassword(securityConfig.passwordEncoder().encode(dto.getPassword()));
+        userEntity.setName(dto.getName());
+        userEntity.setLevel(dto.getLevel() == 0 ? 1 : dto.getLevel()); // 기본 level=1
+        userEntity.setCreatedDate(LocalDateTime.now());
+        userEntity.setDeleteAt("N");
+        return userEntity;
     }
 
 

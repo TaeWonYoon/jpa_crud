@@ -13,9 +13,9 @@ public class BoardDTO {
     private Long id;               // 글 번호 (PK)
     private String title;          // 제목
     private String content;        // 내용
-    private int createdId;         // 작성자
+    private Long createdId;         // 작성자
     private String authorName;         // 작성자 이름
-    private int updatedId;         // 수정자
+    private Long updatedId;         // 수정자
     private int views;         // 조회수
     private String deleteAt;        // 삭제여부 N, Y
     private LocalDateTime createdDate;  // 작성일시 created_date
@@ -27,7 +27,7 @@ public class BoardDTO {
         boardDTO.setId(entity.getId());
         boardDTO.setTitle(entity.getTitle());
         boardDTO.setContent(entity.getContent());
-        //boardDTO.setCreatedId(entity.getCreatedId());
+        boardDTO.setCreatedId(entity.getCreatedId());
         boardDTO.setCreatedDate(entity.getCreatedDate());
         boardDTO.setViews(entity.getViews());
 

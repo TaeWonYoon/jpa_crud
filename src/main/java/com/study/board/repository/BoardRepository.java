@@ -9,10 +9,13 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
 
     @Query("SELECT b FROM BoardEntity b WHERE "
+            + "b.deleteAt ='N' AND "
+            + "(:title IS NULL OR b.title LIKE %:title%) AND "
             + "(:title IS NULL OR b.title LIKE %:title%) AND "
             + "(:startDateTime IS NULL OR b.createdDate >= :startDateTime) AND "
             + "(:endDateTime IS NULL OR b.createdDate <= :endDateTime)")
@@ -20,4 +23,7 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
                                              @Param("startDateTime") LocalDateTime startDateTime,
                                              @Param("endDateTime") LocalDateTime endDateTime,
                                              Pageable pageable);
+
+    //상세조회
+    Optional<BoardEntity> findByIdAndDeleteAt(Long id, String deleteAt);
 }

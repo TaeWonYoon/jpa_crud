@@ -1,7 +1,7 @@
 package com.study.board.service;
 
-import com.study.file.entity.FileEntity;
-import com.study.file.repository.FileRepository;
+import com.study.User.entity.UserEntity;
+import com.study.User.repository.UserRepository;
 import com.study.file.service.FileService;
 import com.study.board.entity.BoardEntity;
 import com.study.board.model.BoardDTO;
@@ -13,15 +13,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -35,18 +30,21 @@ public class BoardService {
     private BoardRepository boardRepository;
 
     @Autowired
-    private FileRepository fileRepository;
+    private FileService fileService;
 
     @Autowired
-    private FileService fileService;
+    private UserRepository userRepository;
 
     private static final Logger log = LoggerFactory.getLogger(BoardService.class);
 
-    public void boardSave(BoardDTO dto, MultipartFile file) throws IOException {
+    public void boardSave(BoardDTO boardDTO, MultipartFile file) throws IOException {
         log.info("########### BoardService boardSave() start ###########");
 
+        BoardEntity entity = BoardEntity.toSaveEntity(boardDTO); //dto에서 entity로 변환
 
-        BoardEntity entity = BoardEntity.toSaveEntity(dto); //dto에서 entity로 변환
+        // user 객체 설정
+        UserEntity user = userRepository.getReferenceById(boardDTO.getCreatedId()); // lazy
+        entity.setUser(user);
 
         BoardEntity saveBoard = boardRepository.save(entity);
 
@@ -93,7 +91,7 @@ public class BoardService {
 
     public BoardDTO getBoardById(Long id) {
         log.info("########### BoardService getBoardById() start ###########");
-        Optional<BoardEntity> optional = boardRepository.findById(id);
+        Optional<BoardEntity> optional = boardRepository.findByIdAndDeleteAt(id, "N");
         return optional.map(BoardDTO::toBoardDto).orElse(null);
     }
 
@@ -110,14 +108,27 @@ public class BoardService {
         // 게시글 내용 수정
         board.setTitle(dto.getTitle());
         board.setContent(dto.getContent());
+        board.setUpdatedId(dto.getUpdatedId());
         boardRepository.save(board);
     }
 
+
+    //조회수 증가
     @Transactional
     public void increaseViews(Long id) {
+        log.info("########### BoardService increaseViews() start ###########");
         BoardEntity board = boardRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("게시글 없음"));
 
         board.setViews(board.getViews() + 1);
+    }
+
+    //게시글 삭제 deleteAt = 'Y'
+    public void deleteBoard(Long id) {
+        log.info("########### BoardService deleteBoard() start ###########");
+        BoardEntity boardEntity = boardRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("게시글이 존재하지 않습니다. id=" + id));
+        boardEntity.setDeleteAt("Y");
+        boardRepository.save(boardEntity);
     }
 }

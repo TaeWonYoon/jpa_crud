@@ -7,12 +7,18 @@
       MySiteLogo
     </div>
     <nav>
-      <a class="text-white font-weight-bold ml-3" th:href="@{'/user/register'}">회원가입</a>
-      <a href="/login" class="text-white font-weight-bold ml-3">로그인</a>
-      <a href="/board/list" class="text-white font-weight-bold ml-3">게시판</a>
-      <span class="welcome ml-3 font-italic">
-        환영합니다, <span>사용자</span>님
-      </span>
+      <div th:if="${session.loginUser == null}">
+        <a class="text-white font-weight-bold ml-3" th:href="@{'/user/register'}">회원가입</a>
+        <a href="/user/login" class="text-white font-weight-bold ml-3">로그인</a>
+      </div>
+
+      <div th:if="${session.loginUser != null}">
+        <a href="/board/list" class="text-white font-weight-bold ml-3">게시판</a>
+        <a href="/user/logout" class="text-white font-weight-bold ml-3">로그아웃</a>
+        <span class="welcome ml-3 font-italic">
+          환영합니다, <span th:text="${session.loginUser.loginId} + ' (' + ${session.loginUser.name} + ')'"></span>님
+        </span>
+      </div>
     </nav>
   </header>
 </div>

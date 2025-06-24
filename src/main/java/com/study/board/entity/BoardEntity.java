@@ -24,12 +24,13 @@ public class BoardEntity {
     @Column(length = 1000, nullable = false)
     private String content; //내용
 
-    /*
+
+    @Column(name = "created_id", insertable = false, updatable = false)
+    private Long createdId; //등록자 아이디
+
+
     @Column
-    private int createdId; //등록자 아이디
-*/
-    @Column
-    private int updatedId; //수정자 아이디
+    private Long updatedId; //수정자 아이디
 
     @Column
     private int views;  // 조회수
@@ -57,13 +58,15 @@ public class BoardEntity {
         this.updatedDate = LocalDateTime.now();
     }
 
-    public static BoardEntity toSaveEntity(BoardDTO dto) {
-        BoardEntity entity = new BoardEntity();
-        entity.setId(dto.getId());
-        entity.setTitle(dto.getTitle());
-        entity.setContent(dto.getContent());
-        entity.setViews(dto.getViews());
-        return entity;
+    public static BoardEntity toSaveEntity(BoardDTO boardDTO) {
+        BoardEntity boardEntity = new BoardEntity();
+        boardEntity.setId(boardDTO.getId());
+        boardEntity.setTitle(boardDTO.getTitle());
+        boardEntity.setContent(boardDTO.getContent());
+        boardEntity.setViews(boardDTO.getViews());
+        boardEntity.setUpdatedId(boardDTO.getUpdatedId());
+        boardEntity.setDeleteAt("N");
+        return boardEntity;
     }
 
 

@@ -1,9 +1,11 @@
 package com.study.board.controller;
 
+import com.study.User.model.UserDTO;
 import com.study.board.model.BoardDTO;
 import com.study.board.service.BoardService;
 import com.study.file.model.FileDTO;
 import com.study.file.service.FileService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,8 +69,10 @@ public class BoardController {
 
     // 글 작성 처리
     @PostMapping("/write")
-    public String write(BoardDTO boardDTO, @RequestParam("file") MultipartFile file) throws IOException {
+    public String write(BoardDTO boardDTO, @RequestParam("file") MultipartFile file, HttpSession session) throws IOException {
         log.info("########### BoardController POST write() start ###########");
+        UserDTO loginUser = (UserDTO) session.getAttribute("loginUser");
+        boardDTO.setCreatedId(loginUser.getId()); //create_id 정보 넣기
         boardService.boardSave(boardDTO, file);
         return "redirect:/board/list";
     }
@@ -79,8 +83,7 @@ public class BoardController {
         log.info("########### BoardController GET boardView() start ###########");
         boardService.increaseViews(id); //조회수 증가
 
-        BoardDTO board = boardService.getBoardById(id); //게시글 조회
-
+        BoardDTO board = boardService.getBoardById(id); //게시글 조회 (deleteAt 'N'인 항목만)
         if (board == null) {
             return "redirect:/board/list";
         }
@@ -116,18 +119,21 @@ public class BoardController {
     @PutMapping("/edit/{id}")
     public String edit(@PathVariable Long id,
                        @ModelAttribute BoardDTO boardDTO,
-                       @RequestParam(value = "file", required = false) MultipartFile file) {
+                       @RequestParam(value = "file", required = false) MultipartFile file,
+                       HttpSession session) {
         log.info("########### BoardController PostMapping edit() start ###########");
+        UserDTO loginUser = (UserDTO) session.getAttribute("loginUser");
+        boardDTO.setUpdatedId(loginUser.getId()); //create_id 정보 넣기
         boardService.updateBoard(id, boardDTO, file);
         return "redirect:/board/view/" + id;
     }
 
-    /*
     // 글 삭제
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
-        boardService.deleteById(id);
+        log.info("########### BoardController GetMapping delete() start ############");
+        boardService.deleteBoard(id);
         return "redirect:/board/list";
     }
-     */
+
 }

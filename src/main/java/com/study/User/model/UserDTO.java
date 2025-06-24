@@ -5,13 +5,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
+public class UserDTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private Long id;               // 글 번호 (PK)
     private String loginId;          // 제목
     private String password;        // 내용

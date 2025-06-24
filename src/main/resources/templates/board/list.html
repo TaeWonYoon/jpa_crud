@@ -38,23 +38,10 @@
                             <input type="date" class="form-control form-control-sm d-inline-block" name="endDate" style="width: 150px;"  th:value="${#temporals.format(endDate, 'yyyy-MM-dd')}" />
                         </td>
                     </tr>
-                    <tr>
-
-                    </tr>
-                    <tr>
-                        <th>상태</th>
-                        <td colspan="3">
-                            <select class="form-control form-control-sm" name="status">
-                                <option value="">전체</option>
-                                <option value="open">공개</option>
-                                <option value="close">비공개</option>
-                            </select>
-                        </td>
-                    </tr>
                     </tbody>
                 </table>
                 <div class="btn-group-right">
-                    <button type="button" class="btn btn-primary btn-sm mr-3" onclick="boardWrite()">글쓰기</button>
+                    <button type="button" class="btn btn-primary btn-sm mr-2" onclick="boardWrite()">글쓰기</button>
                     <button type="submit" class="btn btn-secondary btn-sm mr-2">검색</button>
                     <button type="button" class="btn btn-warning btn-sm mr-2" th:onclick="location.href='/board/list'">초기화</button>
                 </div>
@@ -71,8 +58,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="board : ${boardList}">
-                        <td th:text="${board.id}">1</td>
+                    <tr th:each="board, iterStat : ${boardList}">
+                        <td th:text="${page.totalElements - (page.number * page.size) - iterStat.index}">1</td>
                         <td><a th:href="@{'/board/view/' + ${board.id}}" th:text="${board.title}">게시글 제목</a></td>
                         <td th:text="${board.authorName}">작성자</td>
                         <td th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd')}"></td>
