@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+  <title>회원정보 상세조회</title>
+</head>
+<body>
+<div layout:fragment="content" class="container mt-4">
+
+  <h2 class="mb-4">회원정보 상세조회</h2>
+
+  <div class="mb-3">
+    <label class="form-label"><strong>로그인 아이디</strong></label>
+    <p class="form-control-plaintext" th:text="${member.loginId}">로그인 아이디</p>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label"><strong>이름</strong></label>
+    <input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요" th:value="${member.name}" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label"><strong>사용자 유형</strong></label>
+    <select class="form-control col-sm-2" name="level">
+      <option value="1" th:selected="${member.level == 1}">회원</option>
+      <option value="9" th:selected="${member.level == 9}">관리자</option>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label"><strong>가입일</strong></label>
+    <p class="form-control-plaintext" th:text="${#temporals.format(member.createdDate, 'yyyy-MM-dd')}">가입일</p>
+  </div>
+
+  <div class="text-right">
+    <a  th:href="@{/board/delete/}" class="btn btn-primary">수정</a>
+    <a  th:href="@{/board/delete/}" class="btn btn-danger">회원탈퇴</a>
+    <a th:href="@{/admin/member/list}" class="btn btn-secondary">목록</a>
+  </div>
+  <script>
+
+  </script>
+</div>
+</body>
+</html>

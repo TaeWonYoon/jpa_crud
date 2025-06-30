@@ -86,57 +86,5 @@ public class UserController {
         return "redirect:/";   // 홈으로 리다이렉트
     }
 
-/*
 
-
-    @Autowired
-    private BoardService boardService;
-
-
-    @GetMapping("/list")
-    public String list() {
-        log.info("########### BoardController GET list() start ###########");
-        return "board/list";
-    }
-
-
-    // 글 작성 폼
-    @GetMapping("/register")
-    public String registerForm() {
-        log.info("########### BoardController GET writeForm() start ###########");
-        return "board/write";
-    }
-
-
-    // 글 작성 처리
-    @PostMapping("/register")
-    public String register(UserDTO UserDTO) {
-        log.info("########### BoardController POST write() start ###########");
-        boardService.save(boardDTO);
-        return "redirect:/board/list";
-    }
-
-
-    // 글 수정 폼
-    @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable Long id, Model model) {
-        model.addAttribute("board", boardService.findById(id));
-        return "board/edit";
-    }
-
-    // 글 수정 처리
-    @PostMapping("/edit/{id}")
-    public String edit(@PathVariable Long id, @ModelAttribute Board board) {
-        board.setId(id);
-        boardService.save(board);
-        return "redirect:/board/list";
-    }
-
-    // 글 삭제
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) {
-        boardService.deleteById(id);
-        return "redirect:/board/list";
-    }
-     */
 }

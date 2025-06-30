@@ -38,8 +38,9 @@ dependencies {
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.4.0'  //타임리프 레이아웃
 	implementation 'org.springframework.boot:spring-boot-starter-security' // 시큐리티 암호화
 	developmentOnly 'org.springframework.boot:spring-boot-devtools' //세션 유지 시 핫스왑 지원, 디버그 모드로 실행
-
 }
+
+
 
 tasks.named('test') {
 	useJUnitPlatform()

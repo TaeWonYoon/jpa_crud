@@ -69,34 +69,36 @@
             </table>
             <!-- 페이지네이션 -->
             <nav aria-label="Page navigation" class="mt-4">
+
                 <ul class="pagination justify-content-center">
+                    <th:block th:if="${page.totalPages > 0}">
+                        <!-- 이전 페이지 -->
+                        <li class="page-item" th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
+                            <a class="page-link"
+                               th:href="@{/board/list(page=${page.number - 1}, title=${param.title}, startDate=${startDate}, endDate=${endDate})}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
 
-                    <!-- 이전 페이지 -->
-                    <li class="page-item" th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
-                        <a class="page-link"
-                           th:href="@{/board/list(page=${page.number - 1}, title=${param.title}, startDate=${startDate}, endDate=${endDate})}"
-                           aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
+                        <!-- 번호 -->
+                        <li class="page-item"
+                            th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+                            th:classappend="${i == page.number} ? 'active'">
+                            <a class="page-link"
+                               th:href="@{/board/list(page=${i}, title=${title}, startDate=${startDate}, endDate=${endDate})}"
+                               th:text="${i + 1}">1</a>
+                        </li>
 
-                    <!-- 번호 -->
-                    <li class="page-item"
-                        th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
-                        th:classappend="${i == page.number} ? 'active'">
-                        <a class="page-link"
-                           th:href="@{/board/list(page=${i}, title=${title}, startDate=${startDate}, endDate=${endDate})}"
-                           th:text="${i + 1}">1</a>
-                    </li>
-
-                    <!-- 다음 페이지 -->
-                    <li class="page-item" th:classappend="${page.hasNext()} ? '' : 'disabled'">
-                        <a class="page-link"
-                           th:href="@{/board/list(page=${page.number + 1}, title=${param.title}, startDate=${startDate}, endDate=${endDate})}"
-                           aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
+                        <!-- 다음 페이지 -->
+                        <li class="page-item" th:classappend="${page.hasNext()} ? '' : 'disabled'">
+                            <a class="page-link"
+                               th:href="@{/board/list(page=${page.number + 1}, title=${param.title}, startDate=${startDate}, endDate=${endDate})}"
+                               aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </th:block>
                 </ul>
             </nav>
         </section>

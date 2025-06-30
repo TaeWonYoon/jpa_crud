@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/layout}"
+>
+<head>
+    <title>관리자 회원정보</title>
+</head>
+<body>
+
+<header>
+    <div>리스트</div>
+</header>
+
+<div layout:fragment="content">
+    <!-- 네비게이션 -->
+    <div class="sidebar" th:replace="fragments/adminNavigation :: admNav"></div>
+
+    <div class="container" style="padding-top: 80px; padding-bottom: 60px;">
+
+        <section class="content">
+            <!-- 1. 제목 헤더 -->
+            <h3 class="mb-3">회원정보 리스트</h3>
+
+            <!-- 검색조건 테이블 -->
+            <form method="get" th:action="@{/admin/member/list}">
+                <table class="table table-bordered table-sm">
+                    <tbody>
+                    <tr>
+                        <th style="width: 120px;">검색조건</th>
+                        <td>
+                            <div class="form-inline">
+                                <select class="form-control form-control-sm mr-2" name="searchType">
+                                    <option value="" th:selected="${#strings.isEmpty(param.searchType)}">전체</option>
+                                    <option value="loginId" th:selected="${#strings.equals(param.searchType, 'loginId')}">아이디</option>
+                                    <option value="name" th:selected="${#strings.equals(param.searchType, 'name')}">이름</option>
+                                </select>
+                                <input type="text" class="form-control form-control-sm mr-2" name="keyword"
+                                       th:value="${param.keyword}" placeholder="검색어를 입력하세요" />
+                            </div>
+                        </td>
+                        <th>등급</th>
+                        <td>
+                            <select class="form-control form-control-sm" name="level">
+                                <option value="" th:selected="${#strings.isEmpty(param.level)}">전체</option>
+                                <option value="1" th:selected="${#strings.equals(param.level, '1')}">회원</option>
+                                <option value="9" th:selected="${#strings.equals(param.level, '9')}">관리자</option>
+                            </select>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-secondary btn-sm mr-2">검색</button>
+                    <button type="button" class="btn btn-warning btn-sm mr-2" th:onclick="location.href='/admin/member/list'">초기화</button>
+                </div>
+            </form>
+            <span>총 <span th:text="${page.totalElements}">0</span> 건</span>
+            <table class="table table-hover board-table">
+                <thead class="thead-light">
+                <tr>
+                    <th>번호</th>
+                    <th>아이디</th>
+                    <th>이름</th>
+                    <th>유형</th>
+                    <th>생성일</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="member, iterStat : ${memberList}">
+                    <td th:text="${page.totalElements - (page.number * page.size) - iterStat.index}">1</td>
+                    <td>
+                        <a
+                           th:href="@{'/admin/member/view/' + ${member.id}}"
+                           th:text="${member.LoginId}"
+                        >유저아이디</a>
+                    </td>
+                    <td th:text="${member.name}">작성자</td>
+                    <td th:text="${member.level == 1 ? '회원' : '관리자'}">유형</td>
+                    <td th:text="${#temporals.format(member.createdDate, 'yyyy-MM-dd')}">날짜</td>
+                </tr>
+                </tbody>
+            </table>
+            <!-- 페이지네이션 -->
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <th:block th:if="${page.totalPages > 0}">
+                        <!-- 이전 페이지 -->
+                        <li class="page-item" th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
+                            <a class="page-link"
+                               th:href="@{/admin/member/list(page=${page.number - 1}, searchType=${param.searchType}, keyword=${param.keyword}, level=${param.level})}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        <!-- 번호 -->
+                        <li class="page-item"
+                            th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+                            th:classappend="${i == page.number} ? 'active'">
+                            <a class="page-link"
+                               th:href="@{/admin/member/list(page=${page.number - 1}, searchType=${param.searchType}, keyword=${param.keyword}, level=${param.level})}"
+                               th:text="${i + 1}">1</a>
+                        </li>
+
+                        <!-- 다음 페이지 -->
+                        <li class="page-item" th:classappend="${page.hasNext()} ? '' : 'disabled'">
+                            <a class="page-link"
+                               th:href="@{/admin/member/list(page=${page.number - 1}, searchType=${param.searchType}, keyword=${param.keyword}, level=${param.level})}"
+                               aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </th:block>
+                </ul>
+            </nav>
+        </section>
+    </div>
+    <script>
+        function boardWrite() {
+          location.href = "/board/write";
+        }
+    </script>
+</div>
+
+
+
+</body>
+</html>
+
+
+
