@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/layout}"
+>
+<head>
+    <title>메인 페이지</title>
+    <link rel="stylesheet" th:href="@{/css/board/board.css}" />
+</head>
+<body>
+
+<header>
+    <div>리스트</div>
+</header>
+
+<div layout:fragment="content">
+    <!-- 네비게이션 -->
+    <div class="sidebar" th:replace="fragments/adminNavigation :: admNav"></div>
+
+    <div class="container" style="padding-top: 80px; padding-bottom: 60px;">
+
+        <section class="content">
+            <!-- 1. 제목 헤더 -->
+            <h3 class="mb-3">게시글 리스트</h3>
+
+            <!-- 검색조건 테이블 -->
+            <form>
+                <table class="table table-bordered table-sm">
+                    <tbody>
+                    <tr>
+                        <th style="width: 120px;">제목</th>
+                        <td><input type="text" class="form-control form-control-sm" name="title" th:value="${title}" /></td>
+                        <th>작성일</th>
+                        <td>
+                            <input type="date" class="form-control form-control-sm d-inline-block" name="startDate" style="width: 150px;" th:value="${#temporals.format(startDate, 'yyyy-MM-dd')}" />
+                            ~
+                            <input type="date" class="form-control form-control-sm d-inline-block" name="endDate" style="width: 150px;"  th:value="${#temporals.format(endDate, 'yyyy-MM-dd')}" />
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="btn-group-right">
+                    <th:block th:if="${registTy eq 'faq'}">
+                        <button type="button" class="btn btn-primary btn-sm mr-2" onclick="boardWrite()">글쓰기</button>
+                    </th:block>
+                    <button type="submit" class="btn btn-secondary btn-sm mr-2">검색</button>
+                    <button type="button"
+                            class="btn btn-warning btn-sm mr-2"
+                            th:attr="data-uri=@{'/admin/boards/' + ${registTy} + 'List'}"
+                            onclick="location.href=this.dataset.uri">
+                        초기화
+                    </button>
+                </div>
+            </form>
+            <span>총 <span th:text="${page.totalElements}">0</span> 건</span>
+            <table class="table table-hover board-table">
+                <thead class="thead-light">
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>작성일</th>
+                        <th>조회수</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="board, iterStat : ${boardList}">
+                        <td th:text="${page.totalElements - (page.number * page.size) - iterStat.index}">1</td>
+                        <td><a th:href="@{'/admin/boards/' + ${registTy} +'View/' + ${board.id}}" th:text="${board.title}">게시글 제목</a></td>
+                        <td th:text="${board.authorName}">작성자</td>
+                        <td th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd')}"></td>
+                        <td th:text="${board.views}">조회수</td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- 페이지네이션 -->
+            <nav aria-label="Page navigation" class="mt-4">
+
+                <ul class="pagination justify-content-center">
+                    <th:block th:if="${page.totalPages > 0}"
+                              th:with="
+                                startStr=${startDate} != null ? ${startDate} : '',
+                                endStr=${endDate} != null ? ${endDate} : ''
+                    ">
+                        <!-- 이전 페이지 -->
+                        <li class="page-item" th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
+                            <a class="page-link"
+                               th:href="@{|/admin/boards/${registTy}List?page=${i}&title=${title}&startDate=${startStr}&endDate=${endStr}|}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        <!-- 번호 -->
+                        <li class="page-item"
+                            th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+                            th:classappend="${i == page.number} ? 'active'">
+                            <a class="page-link"
+                               th:href="@{|/admin/boards/${registTy}List?page=${i}&title=${title}&startDate=${startStr}&endDate=${endStr}|}"
+                               th:text="${i + 1}">1</a>
+                        </li>
+
+                        <!-- 다음 페이지 -->
+                        <li class="page-item" th:classappend="${page.hasNext()} ? '' : 'disabled'">
+                            <a class="page-link"
+                               th:href="@{|/admin/boards/${registTy}List?page=${i}&title=${title}&startDate=${startStr}&endDate=${endStr}|}"
+                               aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </th:block>
+                </ul>
+            </nav>
+        </section>
+    </div>
+<script>
+    function boardWrite() {
+      location.href = "admin/boards/write";
+    }
+</script>
+</div>
+</body>
+</html>
+
+
+

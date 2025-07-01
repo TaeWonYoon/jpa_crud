@@ -28,6 +28,8 @@ public class BoardEntity {
     @Column(name = "created_id", insertable = false, updatable = false)
     private Long createdId; //등록자 아이디
 
+    @Column
+    private String createdName; //등록자이름
 
     @Column
     private Long updatedId; //수정자 아이디
@@ -58,6 +60,9 @@ public class BoardEntity {
         this.updatedDate = LocalDateTime.now();
     }
 
+    @Column
+    private String registTy; //자유게시글 or Faq 구분
+
     public static BoardEntity toSaveEntity(BoardDTO boardDTO) {
         BoardEntity boardEntity = new BoardEntity();
         boardEntity.setId(boardDTO.getId());
@@ -66,6 +71,8 @@ public class BoardEntity {
         boardEntity.setViews(boardDTO.getViews());
         boardEntity.setUpdatedId(boardDTO.getUpdatedId());
         boardEntity.setDeleteAt("N");
+        boardEntity.setRegistTy(boardDTO.getRegistTy());
+        boardEntity.setCreatedName(boardDTO.getCreatedName());
         return boardEntity;
     }
 

@@ -1,11 +1,8 @@
-package com.study.admin.service;
+package com.study.admin.member.service;
 
-import com.study.User.controller.UserController;
 import com.study.User.entity.UserEntity;
 import com.study.User.model.UserDTO;
-import com.study.admin.repository.MemberRepository;
-import com.study.board.entity.BoardEntity;
-import com.study.board.model.BoardDTO;
+import com.study.admin.member.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.util.ObjectUtils;
 import org.thymeleaf.util.StringUtils;
 
 import java.time.LocalDate;
@@ -23,7 +19,6 @@ import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,8 +63,6 @@ public class MemberService {
                 break;
             }
         }
-        log.info("loginId={}", loginId);
-        log.info("name={}", name);
         // 검색 조건을 이용한 페이지 조회
         Page<UserEntity> page = memberRepository.findBySearchConditions(loginId, name, level, startDateTime, endDateTime, keyword, pageable);
         // DTO 변환
@@ -86,10 +79,31 @@ public class MemberService {
     }
 
     public UserDTO getMemberById(Long id){
-        log.info("########### BoardService getBoardById() start ###########");
+        log.info("########### MemberService getBoardById() start ###########");
         UserEntity user = memberRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("회원이 없습니다."));
 
         return UserDTO.toUserDto(user);
+    }
+
+    public UserEntity updateMember(Long id, UserDTO userDTO){
+        log.info("########### MemberService updateMember() start ###########");
+        UserEntity user = memberRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("회원이 없습니다."));
+
+        user.setName(userDTO.getName());
+        user.setLevel(userDTO.getLevel());
+
+        return memberRepository.save(user);
+    }
+
+    public UserEntity deleteMember(Long id){
+        log.info("########### MemberService delteMember() start ###########");
+        UserEntity user = memberRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("회원이 없습니다."));
+
+        user.setDeleteAt("Y");
+
+        return memberRepository.save(user);
     }
 }

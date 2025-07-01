@@ -9,10 +9,10 @@
   <link rel="stylesheet" th:href="@{/css/header.css}" />
   <link rel="stylesheet" th:href="@{/css/container.css}" />
   <link rel="stylesheet" th:href="@{/css/footer.css}" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
-        crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" crossorigin="anonymous">
+<!--        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"-->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 
@@ -22,5 +22,32 @@
 
 <div th:replace="fragments/footer :: footer"></div>
 
+<script>
+
+  function subToggle(id) { //토글 이벤트 생성
+    $("#"+id).toggle();
+  }
+
+  var urlPath = window.location.pathname.split('/');
+  if(urlPath[1] == "admin") {
+    if(urlPath[2] == "member") { //회원관리
+        $(".sb-all").hide(); //서브메뉴 전체 닫기
+        $("#memberSubmenu").show();
+        $("#memberList").css("background", "#d3c3c3");
+    } else if(urlPath[2] == "withdrawal")  {//회원탈퇴 관리
+        $(".sb-all").hide(); //서브메뉴 전체 닫기
+        $("#memberSubmenu").show();
+        $("#withdrawalList").css("background", "#d3c3c3");
+    } else if(urlPath[2] == "boards") { // 게시물 free, faq 관리
+        $(".sb-all").hide(); //서브메뉴 전체 닫기
+        $("#boardsSubmenu").show();
+        if(urlPath[3] == "freeList") { //자유글인경우
+          $("#freeBoardsSubmenu").css("background", "#d3c3c3");
+        } else { //FAQ인 경우
+          $("#faqBoardsSubmenu").css("background", "#d3c3c3");
+        }
+    }
+  }
+</script>
 </body>
 </html>

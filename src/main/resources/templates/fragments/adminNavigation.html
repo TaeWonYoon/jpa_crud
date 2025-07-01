@@ -1,8 +1,41 @@
 <!-- templates/fragments/adminNavigation.html -->
 <nav class="sidebar" th:fragment="admNav">
-  <ul>
-    <li><a th:href="@{/admin/dashboard}">관리자 대시보드</a></li>
-    <li><a th:href="@{/admin/member/list}">회원관리</a></li>
-    <li><a th:href="@{/admin/board/list}">게시물관리</a></li>
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <a class="nav-link" th:href="@{/admin/dashboard}">관리자 대시보드</a>
+    </li>
+
+    <!-- 회원관리 드롭다운 -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-toggle="collapse" onclick="subToggle('memberSubmenu')" role="button" aria-expanded="false" aria-controls="memberSubmenu">
+        회원관리
+      </a>
+      <div class="collapse sb-all" id="memberSubmenu">
+        <ul class="nav flex-column ms-3">
+          <li class="nav-item" id="memberList">
+            <a class="nav-link nav-c-g" th:href="@{/admin/member/list}"> ● 사용자 목록</a>
+          </li>
+          <li class="nav-item nav-c-g" id="withdrawalList">
+            <a class="nav-link" th:href="@{/admin/withdrawal/list}"> ● 탈퇴회원 목록</a>
+          </li>
+        </ul>
+      </div>
+    </li>
+    <!-- 게시물관리 드롭다운 -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" data-bs-toggle="collapse"  onclick="subToggle('boardsSubmenu')" role="button" aria-expanded="false" aria-controls="boardsSubmenu">
+        게시물관리
+      </a>
+      <div class="collapse sb-all" id="boardsSubmenu">
+        <ul class="nav flex-column ms-3">
+          <li class="nav-item" id="freeBoardsSubmenu">
+            <a class="nav-link nav-c-g" th:href="@{/admin/boards/freeList}"> ● 자유게시글 목록</a>
+          </li>
+          <li class="nav-item nav-c-g" id="faqBoardsSubmenu">
+            <a class="nav-link" th:href="@{/admin/boards/faqList}"> ● FAQ 목록</a>
+          </li>
+        </ul>
+      </div>
+    </li>
   </ul>
 </nav>

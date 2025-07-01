@@ -39,7 +39,7 @@ public class BoardService {
 
     public void boardSave(BoardDTO boardDTO, MultipartFile file) throws IOException {
         log.info("########### BoardService boardSave() start ###########");
-
+        boardDTO.setRegistTy("free"); // free -> 자유게시글 , faq -> faq게시글
         BoardEntity entity = BoardEntity.toSaveEntity(boardDTO); //dto에서 entity로 변환
 
         // user 객체 설정

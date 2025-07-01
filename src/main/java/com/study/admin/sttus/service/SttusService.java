@@ -1,4 +1,4 @@
-package com.study.admin.service;
+package com.study.admin.sttus.service;
 
 import org.springframework.stereotype.Service;
 

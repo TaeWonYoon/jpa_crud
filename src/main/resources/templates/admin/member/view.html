@@ -6,38 +6,64 @@
   <title>회원정보 상세조회</title>
 </head>
 <body>
-<div layout:fragment="content" class="container mt-4">
+<div layout:fragment="content">
 
-  <h2 class="mb-4">회원정보 상세조회</h2>
+  <!-- 좌우 배치용 wrapper -->
+  <div class="d-flex">
 
-  <div class="mb-3">
-    <label class="form-label"><strong>로그인 아이디</strong></label>
-    <p class="form-control-plaintext" th:text="${member.loginId}">로그인 아이디</p>
+    <!-- 사이드바 -->
+    <div class="sidebar" th:replace="fragments/adminNavigation :: admNav"></div>
+
+    <!-- 오른쪽 본문 -->
+    <div class="container" style="padding-top: 80px; padding-bottom: 60px;">
+      <section class="content">
+        <h2 class="mb-3">회원정보 상세조회</h2>
+
+        <form th:action="@{/admin/member/edit/{id}(id=${member.id})}" method="post">
+          <input type="hidden" name="_method" value="put"/>
+
+          <div class="mb-3">
+            <label class="form-label"><strong>로그인 아이디</strong></label>
+            <p class="form-control-plaintext" th:text="${member.loginId}">로그인 아이디</p>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label"><strong>이름</strong></label>
+            <input type="text" class="form-control" id="name" name="name"
+                   placeholder="이름을 입력하세요" th:value="${member.name}" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label"><strong>사용자 유형</strong></label>
+            <select class="form-control col-sm-2" name="level">
+              <option value="1" th:selected="${member.level == 1}">회원</option>
+              <option value="9" th:selected="${member.level == 9}">관리자</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label"><strong>가입일</strong></label>
+            <p class="form-control-plaintext"
+               th:text="${#temporals.format(member.createdDate, 'yyyy-MM-dd')}">가입일</p>
+          </div>
+
+          <div class="text-right">
+            <button type="submit" class="btn btn-primary">수정</button>
+            <a th:href="@{'/admin/member/delete/' + ${member.id}}" class="btn btn-danger">회원탈퇴</a>
+            <a th:href="@{/admin/member/list}" class="btn btn-secondary">목록</a>
+          </div>
+        </form>
+      </section>
+    </div>
   </div>
 
-  <div class="mb-3">
-    <label class="form-label"><strong>이름</strong></label>
-    <input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요" th:value="${member.name}" required>
-  </div>
-  <div class="mb-3">
-    <label class="form-label"><strong>사용자 유형</strong></label>
-    <select class="form-control col-sm-2" name="level">
-      <option value="1" th:selected="${member.level == 1}">회원</option>
-      <option value="9" th:selected="${member.level == 9}">관리자</option>
-    </select>
-  </div>
-  <div class="mb-3">
-    <label class="form-label"><strong>가입일</strong></label>
-    <p class="form-control-plaintext" th:text="${#temporals.format(member.createdDate, 'yyyy-MM-dd')}">가입일</p>
-  </div>
-
-  <div class="text-right">
-    <a  th:href="@{/board/delete/}" class="btn btn-primary">수정</a>
-    <a  th:href="@{/board/delete/}" class="btn btn-danger">회원탈퇴</a>
-    <a th:href="@{/admin/member/list}" class="btn btn-secondary">목록</a>
-  </div>
-  <script>
-
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    let msg = [[${msg}]];
+    if (msg) {
+        alert(msg);
+    }
+    /*]]>*/
   </script>
 </div>
 </body>

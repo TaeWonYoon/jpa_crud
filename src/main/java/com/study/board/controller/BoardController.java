@@ -73,6 +73,7 @@ public class BoardController {
         log.info("########### BoardController POST write() start ###########");
         UserDTO loginUser = (UserDTO) session.getAttribute("loginUser");
         boardDTO.setCreatedId(loginUser.getId()); //create_id 정보 넣기
+        boardDTO.setCreatedName(loginUser.getName()); //create_id 정보 넣기
         boardService.boardSave(boardDTO, file);
         return "redirect:/board/list";
     }

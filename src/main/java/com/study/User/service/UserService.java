@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Service
 public class UserService {
 
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private UserRepository userRepository;

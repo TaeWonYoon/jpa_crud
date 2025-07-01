@@ -20,6 +20,8 @@ public class BoardDTO {
     private String deleteAt;        // 삭제여부 N, Y
     private LocalDateTime createdDate;  // 작성일시 created_date
     private LocalDateTime updatedDate;  // 수정일시 updated_date
+    private String registTy; //게시글 타입
+    private String createdName; //등록자 이름
 
 
     public static BoardDTO toBoardDto(BoardEntity entity) {

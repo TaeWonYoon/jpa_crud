@@ -1,9 +1,8 @@
-package com.study.admin.controller;
+package com.study.admin.member.controller;
 
+import com.study.User.entity.UserEntity;
 import com.study.User.model.UserDTO;
-import com.study.admin.service.MemberService;
-import com.study.board.model.BoardDTO;
-import com.study.file.model.FileDTO;
+import com.study.admin.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -41,6 +41,10 @@ public class MemberController {
                         , Model model) {
         log.info("########### MemberController GET list() start ###########");
         log.info("level={}", level);
+
+        LocalDate startDateChange = null;
+        LocalDate endDateChange = null;
+
         Map<String, Object> result = memberService.userList(searchType,keyword, level,startDate, endDate, pageable);
         model.addAttribute("memberList", result.get("memberList"));
         model.addAttribute("page", result.get("page"));
@@ -50,6 +54,7 @@ public class MemberController {
         return "admin/member/list";
     }
 
+    //상세조회
     @GetMapping("/view/{id}")
     public String memberView(@PathVariable Long id, Model model) {
         log.info("########### MemberController GET memberView() start ###########");
@@ -63,6 +68,37 @@ public class MemberController {
         model.addAttribute("member", member);
 
         return "admin/member/view";  // templates/board/view.html 뷰 이름
+    }
+
+    // 회원정보 수정 처리
+    @PutMapping("/edit/{id}")
+    public String edit(@PathVariable Long id,
+                       @ModelAttribute UserDTO userDTO,
+                       RedirectAttributes redirectAttributes) {
+        log.info("########### MemberController PostMapping edit() start ###########");
+        UserEntity result = memberService.updateMember(id, userDTO);
+        
+        if(result != null) {
+            redirectAttributes.addFlashAttribute("msg", "회원 정보가 수정되었습니다.");
+        } else {
+            redirectAttributes.addFlashAttribute("msg", "회원 정보가 실패.");
+        }
+        return "redirect:/admin/member/view/" + id;
+    }
+
+    // 회원탈퇴
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id,
+                         RedirectAttributes redirectAttributes) {
+        log.info("########### MemberController GetMapping delete() start ############");
+        UserEntity result = memberService.deleteMember(id);
+        if(result != null) {
+            redirectAttributes.addFlashAttribute("msg", "회원탈퇴 처리가 완료되었습니다..");
+        } else {
+            redirectAttributes.addFlashAttribute("msg", "회원탈퇴 실패.");
+        }
+
+        return "redirect:/admin/member/list";
     }
 
 }
