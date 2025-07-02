@@ -5,7 +5,7 @@
         layout:decorate="~{layout/layout}"
 >
 <head>
-    <title>메인 페이지</title>
+    <title>관리자 소개 페이지</title>
     <link rel="stylesheet" th:href="@{/css/board/board.css}" />
 </head>
 <body>
@@ -22,7 +22,7 @@
 
         <section class="content">
             <!-- 1. 제목 헤더 -->
-            <h3 class="mb-3">게시글 리스트</h3>
+            <h3 class="mb-3">소개 목록</h3>
 
             <!-- 검색조건 테이블 -->
             <form>
@@ -51,13 +51,11 @@
                     </tbody>
                 </table>
                 <div class="btn-group-right">
-                    <th:block th:if="${registTy eq 'faq'}">
-                        <button type="button" class="btn btn-primary btn-sm mr-2" onclick="boardWrite()">글쓰기</button>
-                    </th:block>
+                    <button type="button" class="btn btn-primary btn-sm mr-2" onclick="boardWrite()">글쓰기</button>
                     <button type="submit" class="btn btn-secondary btn-sm mr-2">검색</button>
                     <button type="button"
                             class="btn btn-warning btn-sm mr-2"
-                            th:attr="data-uri=@{'/admin/boards/' + ${registTy} + 'List'}"
+                            th:attr="data-uri=@{'/admin/list'}"
                             onclick="location.href=this.dataset.uri">
                         초기화
                     </button>
@@ -75,12 +73,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="board, iterStat : ${boardList}">
+                    <tr th:each="introduction, iterStat : ${introductionList}">
                         <td th:text="${page.totalElements - (page.number * page.size) - iterStat.index}">1</td>
-                        <td><a th:href="@{'/admin/boards/' + ${registTy} +'View/' + ${board.id}}" th:text="${board.title}">게시글 제목</a></td>
-                        <td th:text="${board.authorName}">작성자</td>
-                        <td th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd')}"></td>
-                        <td th:text="${board.views}">조회수</td>
+                        <td><a th:href="@{'/admin/introduction/view/' + ${introduction.id}}" th:text="${introduction.title}">게시글 제목</a></td>
+                        <td>작성자</td>
+                        <td th:text="${#temporals.format(introduction.createdDate, 'yyyy-MM-dd')}"></td>
+                        <td>조회수</td>
                     </tr>
                 </tbody>
             </table>
@@ -96,7 +94,7 @@
                         <!-- 이전 페이지 -->
                         <li class="page-item" th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
                             <a class="page-link"
-                               th:href="@{|/admin/boards/${registTy}List?page=${i}&title=${title}&startDate=${startStr}&endDate=${endStr}|}"
+                               th:href="@{|/admin/boards/list?page=${i}&title=${title}&startDate=${startStr}&endDate=${endStr}|}"
                                aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
@@ -107,14 +105,14 @@
                             th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
                             th:classappend="${i == page.number} ? 'active'">
                             <a class="page-link"
-                               th:href="@{|/admin/boards/${registTy}List?page=${i}&title=${title}&startDate=${startStr}&endDate=${endStr}|}"
+                               th:href="@{|/admin/boards/list?page=${i}&title=${title}&startDate=${startStr}&endDate=${endStr}|}"
                                th:text="${i + 1}">1</a>
                         </li>
 
                         <!-- 다음 페이지 -->
                         <li class="page-item" th:classappend="${page.hasNext()} ? '' : 'disabled'">
                             <a class="page-link"
-                               th:href="@{|/admin/boards/${registTy}List?page=${i}&title=${title}&startDate=${startStr}&endDate=${endStr}|}"
+                               th:href="@{|/admin/boards/list?page=${i}&title=${title}&startDate=${startStr}&endDate=${endStr}|}"
                                aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
@@ -126,7 +124,7 @@
     </div>
 <script>
     function boardWrite() {
-      location.href = "/admin/boards/write";
+      location.href = "/admin/introduction/write";
     }
 </script>
 </div>

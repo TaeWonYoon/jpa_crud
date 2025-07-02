@@ -16,8 +16,8 @@ public interface MemberRepository extends JpaRepository<UserEntity, Long> {
     @Query("SELECT u FROM UserEntity u WHERE "
             + "u.deleteAt ='N' AND "
             + "(:loginId IS NULL OR u.loginId LIKE %:loginId%) AND "
-            + "(:keyword IS NULL OR (u.loginId LIKE %:keyword% OR u.name LIKE %:keyword%)) AND "
             + "(:name IS NULL OR u.name LIKE %:name%) AND "
+            + "(:keyword IS NULL OR (u.loginId LIKE %:keyword% OR u.name LIKE %:keyword%)) AND "
             + "(:level IS NULL OR u.level = :level) AND "
             + "(:startDateTime IS NULL OR u.createdDate >= :startDateTime) AND "
             + "(:endDateTime IS NULL OR u.createdDate <= :endDateTime)")

@@ -15,7 +15,7 @@
       <div th:if="${session.loginUser != null}">
         <a
           th:if="${session.loginUser.level == 9}"
-          href="/admin/member/list" class="text-white font-weight-bold ml-3">관리자</a>
+          href="/admin/introduction/list" class="text-white font-weight-bold ml-3">관리자</a>
         <a href="/board/list" class="text-white font-weight-bold ml-3">게시판 </a>
         <a href="/user/logout" class="text-white font-weight-bold ml-3">로그아웃</a>
         <span class="welcome ml-3 font-italic">

@@ -1,38 +1,62 @@
 <!-- templates/fragments/adminNavigation.html -->
 <nav class="sidebar" th:fragment="admNav">
   <ul class="nav flex-column">
+    <!-- 소개관리 드롭다운 -->
     <li class="nav-item">
-      <a class="nav-link" th:href="@{/admin/dashboard}">관리자 대시보드</a>
+      <a class="nav-link collapsed i-border" data-bs-toggle="collapse" onclick="subToggle('introductionSubmenu')" role="button" aria-expanded="false" aria-controls="memberSubmenu">
+        메인소개 관리
+      </a>
+      <div class="collapse sb-all" id="introductionSubmenu">
+        <ul class="nav flex-column ms-3">
+          <li class="nav-item" >
+            <a class="nav-link nav-c-g" id="introductionList" th:href="@{/admin/introduction/list}"> ● 소개관리 목록</a>
+          </li>
+        </ul>
+      </div>
     </li>
 
     <!-- 회원관리 드롭다운 -->
     <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-toggle="collapse" onclick="subToggle('memberSubmenu')" role="button" aria-expanded="false" aria-controls="memberSubmenu">
+      <a class="nav-link collapsed i-border" data-bs-toggle="collapse" onclick="subToggle('memberSubmenu')" role="button" aria-expanded="false" aria-controls="memberSubmenu">
         회원관리
       </a>
       <div class="collapse sb-all" id="memberSubmenu">
         <ul class="nav flex-column ms-3">
-          <li class="nav-item" id="memberList">
-            <a class="nav-link nav-c-g" th:href="@{/admin/member/list}"> ● 사용자 목록</a>
+          <li class="nav-item" >
+            <a class="nav-link nav-c-g" id="memberList" th:href="@{/admin/member/list}"> ● 사용자 목록</a>
           </li>
-          <li class="nav-item nav-c-g" id="withdrawalList">
-            <a class="nav-link" th:href="@{/admin/withdrawal/list}"> ● 탈퇴회원 목록</a>
+          <li class="nav-item" >
+            <a class="nav-link nav-c-g" id="withdrawalList" th:href="@{/admin/withdrawal/list}"> ● 탈퇴회원 목록</a>
           </li>
         </ul>
       </div>
     </li>
     <!-- 게시물관리 드롭다운 -->
     <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-toggle="collapse"  onclick="subToggle('boardsSubmenu')" role="button" aria-expanded="false" aria-controls="boardsSubmenu">
+      <a class="nav-link collapsed i-border" data-bs-toggle="collapse"  onclick="subToggle('boardsSubmenu')" role="button" aria-expanded="false" aria-controls="boardsSubmenu">
         게시물관리
       </a>
       <div class="collapse sb-all" id="boardsSubmenu">
         <ul class="nav flex-column ms-3">
-          <li class="nav-item" id="freeBoardsSubmenu">
-            <a class="nav-link nav-c-g" th:href="@{/admin/boards/freeList}"> ● 자유게시글 목록</a>
+          <li class="nav-item" >
+            <a class="nav-link nav-c-g" id="freeBoardsSubmenu" th:href="@{/admin/boards/freeList}"> ● 자유게시글 목록</a>
           </li>
-          <li class="nav-item nav-c-g" id="faqBoardsSubmenu">
-            <a class="nav-link" th:href="@{/admin/boards/faqList}"> ● FAQ 목록</a>
+          <li class="nav-item" >
+            <a class="nav-link nav-c-g" id="faqBoardsSubmenu" th:href="@{/admin/boards/faqList}"> ● FAQ 목록</a>
+          </li>
+        </ul>
+      </div>
+    </li>
+    <!-- 게시물관리 드롭다운 -->
+    <li class="nav-item">
+      <a class="nav-link collapsed i-border" data-bs-toggle="collapse"  onclick="subToggle('sttusSubmenu')" role="button" aria-expanded="false" aria-controls="sttusSubmenu">
+        통계관리
+      </a>
+      <div class="collapse sb-all" id="sttusSubmenu">
+        <ul class="nav flex-column ms-3">
+          <li class="nav-item" >
+            <a class="nav-link nav-c-g" id="memberSttusSubmenu" th:href="@{/admin/boards/memberSttusList}"> ● 회원 통계 목록</a>
+            <a class="nav-link nav-c-g" id="boardsSttusSubmenu" th:href="@{/admin/boards/boardsSttusList}"> ● 통계 목록</a>
           </li>
         </ul>
       </div>

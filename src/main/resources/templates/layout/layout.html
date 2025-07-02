@@ -33,20 +33,25 @@
     if(urlPath[2] == "member") { //회원관리
         $(".sb-all").hide(); //서브메뉴 전체 닫기
         $("#memberSubmenu").show();
-        $("#memberList").css("background", "#d3c3c3");
+        $("#memberList").css("background", "rgb(159 173 223)");
     } else if(urlPath[2] == "withdrawal")  {//회원탈퇴 관리
         $(".sb-all").hide(); //서브메뉴 전체 닫기
         $("#memberSubmenu").show();
-        $("#withdrawalList").css("background", "#d3c3c3");
+        $("#withdrawalList").css("background", "rgb(159 173 223)");
     } else if(urlPath[2] == "boards") { // 게시물 free, faq 관리
         $(".sb-all").hide(); //서브메뉴 전체 닫기
         $("#boardsSubmenu").show();
         if(urlPath[3] == "freeList") { //자유글인경우
-          $("#freeBoardsSubmenu").css("background", "#d3c3c3");
+          $("#freeBoardsSubmenu").css("background", "rgb(159 173 223)");
         } else { //FAQ인 경우
-          $("#faqBoardsSubmenu").css("background", "#d3c3c3");
+          $("#faqBoardsSubmenu").css("background", "rgb(159 173 223)");
         }
-    }
+    } else if(urlPath[2] == "introduction") { // 메인 소개관리
+      $(".sb-all").hide(); //서브메뉴 전체 닫기
+        $("#introductionSubmenu").show();
+        $("#introductionList").css("background", "rgb(159 173 223)");
+      }
+
   }
 </script>
 </body>

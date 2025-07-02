@@ -15,14 +15,17 @@ public interface BoardsRepository extends JpaRepository<BoardEntity, Long> {
     @Query("SELECT b FROM BoardEntity b WHERE "
             + "b.deleteAt ='N' AND "
             + "(:title IS NULL OR b.title LIKE %:title%) AND "
-            + "(:title IS NULL OR b.title LIKE %:title%) AND "
+            + "(:createdName IS NULL OR b.createdName LIKE %:createdName%) AND "
+            + "(:keyword IS NULL OR (b.title LIKE %:keyword% OR b.createdName LIKE %:keyword%)) AND "
             + "(:registTy IS NULL OR b.registTy LIKE %:registTy%) AND "
             + "(:startDateTime IS NULL OR b.createdDate >= :startDateTime) AND "
             + "(:endDateTime IS NULL OR b.createdDate <= :endDateTime)")
-    Page<BoardEntity> findBySearchConditions(@Param("title") String title,
-                                             @Param("startDateTime") LocalDateTime startDateTime,
-                                             @Param("endDateTime") LocalDateTime endDateTime,
-                                             @Param("registTy") String registTy,
+    Page<BoardEntity> findBySearchConditions(String title,
+                                             String createdName,
+                                             LocalDateTime startDateTime,
+                                             LocalDateTime endDateTime,
+                                             String registTy,
+                                             String keyword,
                                              Pageable pageable);
 
     //상세조회

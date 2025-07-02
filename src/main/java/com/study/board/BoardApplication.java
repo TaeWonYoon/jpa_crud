@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication(scanBasePackages = "com.study")
-@EntityScan(basePackages = {"com.study.board.entity", "com.study.User.entity", "com.study.file.entity"})
+@EntityScan(basePackages = {"com.study.board.entity", "com.study.User.entity", "com.study.file.entity", "com.study.admin.introduction.entity"})
 @EnableJpaRepositories(basePackages = "com.study")
 public class BoardApplication {
 

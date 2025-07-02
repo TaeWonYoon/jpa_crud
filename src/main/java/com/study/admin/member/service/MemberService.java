@@ -63,6 +63,7 @@ public class MemberService {
                 break;
             }
         }
+
         // 검색 조건을 이용한 페이지 조회
         Page<UserEntity> page = memberRepository.findBySearchConditions(loginId, name, level, startDateTime, endDateTime, keyword, pageable);
         // DTO 변환

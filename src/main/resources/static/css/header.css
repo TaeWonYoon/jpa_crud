@@ -26,6 +26,11 @@ nav a:hover {
   font-style: italic;
 }
 
-. nav-c-g{
+.nav-c-g{
     color: #675d5d !important;
+}
+
+.i-border {
+    background: #9190d9;
+    border: 1px solid #5352ad;
 }
