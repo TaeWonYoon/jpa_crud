@@ -4,11 +4,13 @@ import com.study.User.entity.UserEntity;
 import com.study.admin.introduction.model.IntroductionDTO;
 import com.study.board.entity.BoardEntity;
 import com.study.board.model.BoardDTO;
+import com.study.file.entity.FileEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -63,6 +65,9 @@ public class IntroductionEntity {
     @Column
     private int sort; //사용여부
 
+    @Column
+    private String hrefUrl; //이동할 url
+
     public static IntroductionEntity toSaveEntity(IntroductionDTO introductionDTO) {
         IntroductionEntity introductionEntity = new IntroductionEntity();
 
@@ -73,7 +78,7 @@ public class IntroductionEntity {
         introductionEntity.setUseAt(introductionDTO.getUseAt());
         introductionEntity.setSort(introductionDTO.getSort());
         introductionEntity.setDeleteAt("N");
-
+        introductionEntity.setHrefUrl(introductionDTO.getHrefUrl());
         return introductionEntity;
     }
 }

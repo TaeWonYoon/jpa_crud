@@ -50,7 +50,7 @@ public class BoardService {
 
         // 2. 파일 있으면 저장
         if (file != null && !file.isEmpty()) {
-            fileService.saveFile(file, saveBoard);
+            fileService.saveFile(file, saveBoard.getId(), "board", "board");
         }
 
     }
@@ -103,7 +103,7 @@ public class BoardService {
         BoardEntity board = boardRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("게시글 없음"));
         log.info("파일 업로드 시작 준비중!! 보드 내용 확인 ={}", board);
-        int result = fileService.fileEditUpload(id, file); //첨부파일 분기처리 * 게시글 업로드 시 기존 첨부파일이 있으면 삭제 후 등록 없으면 그냥 등록
+        int result = fileService.fileEditUpload(id, file, "board", "board", dto.getUpdatedId().toString()); //첨부파일 분기처리 * 게시글 업로드 시 기존 첨부파일이 있으면 삭제 후 등록 없으면 그냥 등록
         log.info("fileResult={}", result);
         // 게시글 내용 수정
         board.setTitle(dto.getTitle());
@@ -130,5 +130,26 @@ public class BoardService {
                 .orElseThrow(() -> new EntityNotFoundException("게시글이 존재하지 않습니다. id=" + id));
         boardEntity.setDeleteAt("Y");
         boardRepository.save(boardEntity);
+    }
+
+
+    public Map<String, Object> faqList(Pageable pageable) {
+        log.info("########### BoardService faqList() start ###########");
+
+        // 검색 조건을 이용한 페이지 조회
+        Page<BoardEntity> page = boardRepository.findByDeleteAtAndRegistTy("N", "faq", pageable);
+
+        // DTO 변환
+        List<BoardDTO> faqList = page.stream()
+                .map(BoardDTO::toBoardDto)
+                .collect(Collectors.toList());
+
+        // 결과 리턴
+        Map<String, Object> result = new HashMap<>();
+        result.put("faqList", faqList);
+        result.put("page", page);
+
+        return result;
+
     }
 }

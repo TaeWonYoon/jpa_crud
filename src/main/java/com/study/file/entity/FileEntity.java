@@ -1,5 +1,6 @@
 package com.study.file.entity;
 
+import com.study.admin.introduction.entity.IntroductionEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,9 +17,6 @@ public class FileEntity {
 
     @Column(name = "table_name")
     private String tableName;  // 예: "board"
-
-    @Column(name = "table_id")
-    private String tableId;    // 참조 대상 PK 값 (보통 String으로 맞춤)
 
     @Column(name = "file_name")
     private String fileName; // 저장된 파일명
@@ -46,6 +44,9 @@ public class FileEntity {
 
     @Column(name = "delete_at", length = 1)
     private String deleteAt = "N";
+
+    @Column(name = "table_id")
+    private Long tableId;  // PK와 맞추기
 
     @PrePersist
     public void prePersist() {

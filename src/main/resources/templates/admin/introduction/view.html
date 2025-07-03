@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+  <title>소개글 작성</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+  <!-- 좌우 배치용 wrapper -->
+  <div class="d-flex">
+    <!-- 사이드바 -->
+    <div class="sidebar" th:replace="fragments/adminNavigation :: admNav"></div>
+
+    <!-- 오른쪽 본문 -->
+    <div class="container" style="padding-top: 80px; padding-bottom: 60px;">
+      <section class="content">
+        <h2 class="mb-4">소개글 작성</h2>
+
+        <form th:action="@{/admin/introduction/write}"  th:object="${introduction}" method="post" enctype="multipart/form-data">
+          <div class="form-group">
+            <label class="form-label"><strong>제목</strong></label>
+            <p class="form-control-plaintext" th:text="${introduction.title}" style="white-space: pre-wrap;">소개글 제목</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label"><strong>내용</strong></label>
+            <p class="form-control-plaintext" th:text="${introduction.content}" style="white-space: pre-wrap;">소개글 내용</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label"><strong>사용 여부</strong></label><br>
+            <div class="form-check form-check-inline">
+              <p class="form-control-plaintext" th:text="${introduction.useAt == 'Y' ? '사용' : '미사용'}" style="white-space: pre-wrap;">사용여부</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label"><strong>정렬 순서</strong></label>
+            <p class="form-control-plaintext" th:text="${introduction.sort}" style="white-space: pre-wrap;">정렬 순서</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label"><strong>이동 URL</strong></label>
+            <a class="form-control-plaintext" target="_blank" th:text="${introduction.hrefUrl}" th:href="${introduction.hrefUrl}" style="white-space: pre-wrap;">이동하기</a>
+          </div>
+
+          <div class="mb-3" th:if="${introductionFile != null}">
+            <label class="form-label"><strong>첨부파일</strong></label>
+
+            <div th:if="${#strings.startsWith(introductionFile.fileExt.toLowerCase(), '.png') or
+                    #strings.startsWith(introductionFile.fileExt.toLowerCase(), '.jpg') or
+                    #strings.startsWith(introductionFile.fileExt.toLowerCase(), '.jpeg') or
+                    #strings.startsWith(introductionFile.fileExt.toLowerCase(), '.gif')}">
+              <img th:src="@{'/uploads/introduction/' + ${introductionFile.fileName}}"
+                   alt="이미지 미리보기"
+                   class="img-thumbnail"
+                   style="max-width: 300px; max-height: 300px;" />
+            </div>
+
+            <p class="mt-2">
+              <a th:href="@{'/files/download/' + ${introductionFile.id}}"
+                 th:text="${introductionFile.fileNameOrigin}"
+                 class="btn btn-link p-0">파일 다운로드</a>
+            </p>
+          </div>
+
+          <div class="text-right">
+            <a th:href="@{'/admin/introduction/edit/' + ${introduction.id}}" class="btn btn-primary">수정</a>
+            <a th:href="@{'/admin/introduction/delete/' + ${introduction.id}}" class="btn btn-danger">삭제</a>
+            <a th:href="@{/admin/introduction/list}" class="btn btn-secondary">목록</a>
+          </div>
+        </form>
+      </section>
+    </div>
+  </div>
+
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    let msg = [[${msg}]];
+    if (msg) {
+        alert(msg);
+    }
+    /*]]>*/
+  </script>
+</div>
+</body>
+</html>

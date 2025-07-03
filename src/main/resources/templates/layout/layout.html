@@ -29,7 +29,7 @@
   }
 
   var urlPath = window.location.pathname.split('/');
-  if(urlPath[1] == "admin") {
+  if(urlPath[1] == "admin") { //관리자페이지
     if(urlPath[2] == "member") { //회원관리
         $(".sb-all").hide(); //서브메뉴 전체 닫기
         $("#memberSubmenu").show();
@@ -41,7 +41,7 @@
     } else if(urlPath[2] == "boards") { // 게시물 free, faq 관리
         $(".sb-all").hide(); //서브메뉴 전체 닫기
         $("#boardsSubmenu").show();
-        if(urlPath[3] == "freeList") { //자유글인경우
+        if(urlPath[3] == "freeList" || urlPath[3] == "freeView") { //자유글인경우
           $("#freeBoardsSubmenu").css("background", "rgb(159 173 223)");
         } else { //FAQ인 경우
           $("#faqBoardsSubmenu").css("background", "rgb(159 173 223)");
@@ -50,8 +50,15 @@
       $(".sb-all").hide(); //서브메뉴 전체 닫기
         $("#introductionSubmenu").show();
         $("#introductionList").css("background", "rgb(159 173 223)");
+    }
+  } else if(urlPath[1] == "board") { //메인 페이지
+      $(".sb-all").hide(); //서브메뉴 전체 닫기
+      $("#boardSubmenu").show();
+      if(urlPath[2] == "list") { //자유글인경우
+        $("#freeBoardSubmenu").css("background", "rgb(159 173 223)");
+      } else { //FAQ인 경우
+        $("#faqBoardSubmenu").css("background", "rgb(159 173 223)");
       }
-
   }
 </script>
 </body>

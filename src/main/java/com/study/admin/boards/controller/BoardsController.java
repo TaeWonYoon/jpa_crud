@@ -90,8 +90,6 @@ public class BoardsController {
             return "redirect:/board/freeList";
         }
 
-        FileDTO boardFile = fileService.getFileByTableAndId("board", id.toString());
-
         String uri = request.getRequestURI();
 
         if (uri.contains("/freeView/")) { //uri에 따른 분기처리
@@ -99,6 +97,8 @@ public class BoardsController {
         } else if (uri.contains("/faqView/")) {
             model.addAttribute("uri", "faq");
         }
+
+        FileDTO boardFile = fileService.getFileByTableAndId("board", id);
 
         model.addAttribute("board", board);
         model.addAttribute("boardFile", boardFile);
@@ -161,7 +161,7 @@ public class BoardsController {
             return "redirect:/board/list";
         }
 
-        FileDTO boardFile = fileService.getFileByTableAndId("board", id.toString());
+        FileDTO boardFile = fileService.getFileByTableAndId("board", id);
 
         model.addAttribute("board", board);
         model.addAttribute("boardFile", boardFile);

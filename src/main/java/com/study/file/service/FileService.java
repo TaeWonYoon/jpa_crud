@@ -28,10 +28,10 @@ public class FileService {
     private FileRepository fileRepository;
 
     //테이블 저장
-    public void saveFile(MultipartFile file, BoardEntity board) throws IOException {
+    public void saveFile(MultipartFile file, Long id, String path, String tableNm) throws IOException {
         log.info("########### FileService saveFile() start ###########");
 
-        String uploadDir = "C:/uploads/board/";
+        String uploadDir = "C:/uploads/"+path;
 
         File uploadPath = new File(uploadDir);
         if (!uploadPath.exists()) {
@@ -52,8 +52,8 @@ public class FileService {
 
         // 파일 엔티티 저장
         FileEntity fileEntity = new FileEntity();
-        fileEntity.setTableName("board");
-        fileEntity.setTableId(board.getId().toString());
+        fileEntity.setTableName(tableNm);
+        fileEntity.setTableId(id);
         fileEntity.setFileName(storedFilename);
         fileEntity.setFileNameOrigin(originalFilename);
         fileEntity.setFileExt(extension);
@@ -67,7 +67,7 @@ public class FileService {
     }
 
     //테이블 조회 where table, id
-    public FileDTO getFileByTableAndId(String tableName, String tableId) {
+    public FileDTO getFileByTableAndId(String tableName, Long tableId) {
         log.info("########### FileService getFileByTableAndId() start ###########");
 
         Optional<FileEntity> optional = fileRepository.findByTableNameAndTableIdAndDeleteAt(tableName, tableId, "N");
@@ -110,13 +110,13 @@ public class FileService {
     }
 
     //수정 시 파일 업로드(추가,삭제)
-    public int fileEditUpload(Long id, MultipartFile file) {
+    public int fileEditUpload(Long id, MultipartFile file, String tableNm, String path, String userId) {
         log.info("########### FileService fileEditUpload() start ###########");
 
         if (file != null && !file.isEmpty()) {
 
             // 1. 기존 파일 존재 시 삭제 처리
-            fileRepository.findByTableNameAndTableIdAndDeleteAt("board", String.valueOf(id), "N")
+            fileRepository.findByTableNameAndTableIdAndDeleteAt(tableNm, id, "N")
                     .ifPresent(oldFile -> {
                         Path oldPath = Paths.get(oldFile.getFilePath(), oldFile.getFileName());
                         try {
@@ -137,7 +137,7 @@ public class FileService {
 
             // 3. 저장할 이름 및 경로
             String storedFilename = UUID.randomUUID().toString() + fileExt;
-            String uploadDir = "C:/uploads/board/";
+            String uploadDir = "C:/uploads/"+path;
             File uploadPath = new File(uploadDir);
             if (!uploadPath.exists()) {
                 uploadPath.mkdirs();
@@ -153,14 +153,14 @@ public class FileService {
 
             // 4. DB 저장
             FileEntity fileEntity = new FileEntity();
-            fileEntity.setTableName("board");
-            fileEntity.setTableId(String.valueOf(id));
+            fileEntity.setTableName(tableNm);
+            fileEntity.setTableId(id);
             fileEntity.setFileName(storedFilename); // 실제 저장된 파일 이름
             fileEntity.setFileNameOrigin(fileNameOrigin);
             fileEntity.setFileExt(fileExt);
             fileEntity.setFilePath(uploadDir);
             fileEntity.setFileSize(String.valueOf(file.getSize()));
-            fileEntity.setUserId("defaultUser"); // 이후 세션 값으로 대체
+            fileEntity.setUserId(userId); // 이후 세션 값으로 대체
             fileRepository.save(fileEntity);
         }
 

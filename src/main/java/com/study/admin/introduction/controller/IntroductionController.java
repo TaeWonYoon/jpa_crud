@@ -1,7 +1,9 @@
 package com.study.admin.introduction.controller;
 
+import com.study.User.entity.UserEntity;
 import com.study.User.model.UserDTO;
 import com.study.admin.boards.service.BoardsService;
+import com.study.admin.introduction.entity.IntroductionEntity;
 import com.study.admin.introduction.model.IntroductionDTO;
 import com.study.admin.introduction.service.IntroductionService;
 import com.study.board.entity.BoardEntity;
@@ -21,6 +23,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -74,29 +78,97 @@ public class IntroductionController {
 
     // 글 작성 처리
     @PostMapping("/write")
-    public String write(IntroductionDTO introductionDTO, HttpSession session) throws IOException {
+    public String write(IntroductionDTO introductionDTO,
+                        @RequestParam("file") MultipartFile file,
+                        RedirectAttributes redirectAttributes,
+                        HttpSession session) throws IOException {
         log.info("########### IntroductionController POST write() start ###########");
         UserDTO loginUser = (UserDTO) session.getAttribute("loginUser");
         introductionDTO.setCreatedId(loginUser.getId()); //create_id 정보 넣기
         introductionDTO.setCreatedName(loginUser.getName()); //create_id 정보 넣기
-        introductionService.introductionSave(introductionDTO);
+        IntroductionEntity result = introductionService.introductionSave(introductionDTO, file);
+
+
+        if(result != null) {
+            redirectAttributes.addFlashAttribute("msg", "소개글 등록 완료.");
+        } else {
+            redirectAttributes.addFlashAttribute("msg", "소개글 등록 실패.");
+        }
+
+        return "redirect:/admin/introduction/list";
+    }
+
+    // 글 작성 폼
+    @GetMapping("/edit/{id}")
+    public String editForm(@PathVariable Long id,
+                           Model model) {
+        log.info("########### IntroductionController GET editForm() start ###########");
+        IntroductionDTO introduction = introductionService.getBoardById(id); //게시글 조회 (deleteAt 'N'인 항목만)
+        FileDTO introductionFile = fileService.getFileByTableAndId("introduction", id);
+
+        model.addAttribute("introduction", introduction);
+        model.addAttribute("introductionFile", introductionFile);
+
+        return "admin/introduction/write";
+    }
+
+    // 글 작성 폼
+    @PutMapping("/edit/{id}")
+    public String edit(@PathVariable Long id,
+                   IntroductionDTO introductionDTO,
+                   @RequestParam(value = "file", required = false) MultipartFile file,
+                   RedirectAttributes redirectAttributes,
+                   HttpSession session) {
+        log.info("########### IntroductionController PutMapping edit() start ###########");
+        UserDTO loginUser = (UserDTO) session.getAttribute("loginUser");
+        introductionDTO.setUpdatedId(loginUser.getId()); //create_id 정보 넣기
+        IntroductionEntity result = introductionService.updateIntroduction(id, introductionDTO, file);
+
+        if(result != null) {
+            redirectAttributes.addFlashAttribute("msg", "소개글 등록 완료.");
+        } else {
+            redirectAttributes.addFlashAttribute("msg", "소개글 등록 실패.");
+        }
+
+        return "redirect:/admin/introduction/view/" + id;
+    }
+
+
+    // 소개글 상세 조회
+    @GetMapping("/view/{id}")
+    public String view(@PathVariable Long id
+            , HttpServletRequest request
+            , Model model
+    ) {
+        log.info("########### IntroductionController GET view() start ###########");
+
+        IntroductionDTO introduction = introductionService.getBoardById(id); //게시글 조회 (deleteAt 'N'인 항목만)
+
+        FileDTO introductionFile = fileService.getFileByTableAndId("introduction", id);
+
+        model.addAttribute("introduction", introduction);
+        model.addAttribute("introductionFile", introductionFile);
+
+        return "admin/introduction/view";
+    }
+
+
+    // 소개글 삭제
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id
+                        , RedirectAttributes redirectAttributes
+    ) {
+        log.info("########### IntroductionController GET delete(() start ###########");
+
+        IntroductionEntity result = introductionService.deleteIntroduction(id);
+
+        if(result != null) {
+            redirectAttributes.addFlashAttribute("msg", "소개글 등록삭제 완료.");
+        } else {
+            redirectAttributes.addFlashAttribute("msg", "소개글 등록삭제 실패.");
+        }
         return "redirect:/admin/introduction/list";
     }
 
 
-    // 글 상세 조회
-    @GetMapping("/view/{id}")
-    public String boardsView(@PathVariable Long id
-            , HttpServletRequest request
-            , Model model
-    ) {
-        log.info("########### BoardsController GET boardView() start ###########");
-
-        IntroductionDTO introduction = introductionService.getBoardById(id); //게시글 조회 (deleteAt 'N'인 항목만)
-
-        model.addAttribute("introduction", introduction);
-
-
-        return "admin/introduction/write";
-    }
 }

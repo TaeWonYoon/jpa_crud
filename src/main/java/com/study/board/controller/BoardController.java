@@ -89,7 +89,7 @@ public class BoardController {
             return "redirect:/board/list";
         }
 
-        FileDTO boardFile = fileService.getFileByTableAndId("board", id.toString());
+        FileDTO boardFile = fileService.getFileByTableAndId("board", id);
 
         model.addAttribute("board", board);
         model.addAttribute("boardFile", boardFile);
@@ -108,7 +108,7 @@ public class BoardController {
             return "redirect:/board/list";
         }
 
-        FileDTO boardFile = fileService.getFileByTableAndId("board", id.toString());
+        FileDTO boardFile = fileService.getFileByTableAndId("board", id);
 
         model.addAttribute("board", board);
         model.addAttribute("boardFile", boardFile);
@@ -122,7 +122,7 @@ public class BoardController {
                        @ModelAttribute BoardDTO boardDTO,
                        @RequestParam(value = "file", required = false) MultipartFile file,
                        HttpSession session) {
-        log.info("########### BoardController PostMapping edit() start ###########");
+        log.info("########### BoardController PutMapping edit() start ###########");
         UserDTO loginUser = (UserDTO) session.getAttribute("loginUser");
         boardDTO.setUpdatedId(loginUser.getId()); //create_id 정보 넣기
         boardService.updateBoard(id, boardDTO, file);
@@ -137,4 +137,17 @@ public class BoardController {
         return "redirect:/board/list";
     }
 
+    //faq 리스트
+    @GetMapping("/faqList")
+    public String faqList(Model model,
+                          @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        log.info("########### BoardController GetMapping faqList() start ############");
+
+        Map<String, Object> result = boardService.faqList(pageable);
+
+        log.info("result={}", result);
+        model.addAttribute("faqList", result.get("faqList"));
+        model.addAttribute("page", result.get("page"));
+        return "board/faqList";
+    }
 }

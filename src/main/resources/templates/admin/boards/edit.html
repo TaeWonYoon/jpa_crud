@@ -3,12 +3,12 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 <head>
-    <title>게시글 수정</title>
+    <title>FAQ 수정</title>
 </head>
 <body>
 <div layout:fragment="content" class="container mt-4">
 
-    <h2 class="mb-4">게시글 수정</h2>
+    <h2 class="mb-4">FAQ 수정</h2>
 
     <form th:action="@{/admin/boards/faqEdit/{id}(id=${board.id})}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="_method" value="put"/>

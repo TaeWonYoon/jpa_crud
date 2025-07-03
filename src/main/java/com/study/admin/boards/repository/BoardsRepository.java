@@ -1,6 +1,7 @@
 package com.study.admin.boards.repository;
 
 import com.study.board.entity.BoardEntity;
+import com.study.board.model.BoardDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface BoardsRepository extends JpaRepository<BoardEntity, Long> {
@@ -30,5 +32,9 @@ public interface BoardsRepository extends JpaRepository<BoardEntity, Long> {
 
     //상세조회
     Optional<BoardEntity> findByIdAndDeleteAt(Long id, String deleteAt);
+
+
+    //SELECT * FROM board WHERE delete_at = 'N' AND regist_ty = 'free or faq' ORDER BY id DESC LIMIT 3;
+    List<BoardEntity> findTop5ByDeleteAtAndRegistTyOrderByIdDesc(String deleteAt, String registTy);
 
 }

@@ -17,7 +17,7 @@
         <!-- 오른쪽 본문 -->
         <div class="container" style="padding-top: 80px; padding-bottom: 60px;">
             <section class="content">
-                <h2 class="mb-3">게시글 상세조회</h2>
+                <h2 class="mb-3" th:text="${uri == 'free' ? '자유게시글 상세조회' : 'FAQ 상세조회'} ">게시글 상세조회</h2>
 
                 <form th:action="@{'/admin/boards/' + ${uri} + 'Edit/' + ${board.id}}" method="get">
                     <div class="mb-3">
@@ -31,7 +31,7 @@
                     </div>
 
                     <!-- 조회수 -->
-                    <div class="mb-3">
+                    <div class="mb-3" th:if="${uri eq 'free'}">
                         <label class="form-label"><strong>조회수</strong></label>
                         <p class="form-control-plaintext" th:text="${board.views}">0</p>
                     </div>

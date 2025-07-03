@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>FAQ</title>
+    <style>
+        .faq-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .faq-question {
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .faq-answer {
+            display: none;
+            margin-top: 5px;
+            color: #555;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <!-- 네비게이션 -->
+    <div class="sidebar" th:replace="fragments/navigation :: nav"></div>
+
+    <div class="container" style="padding-top: 80px; padding-bottom: 60px;">
+
+        <section class="content">
+            <h3 class="mb-4">자주 묻는 질문 (FAQ)</h3>
+
+            <div class="faq-item" th:each="faq, iterStat : ${faqList}">
+                <div class="faq-question" th:text="${faq.title}" th:onclick="|toggleFaq(${faq.id})|"
+                     >질문 제목</div>
+                <div class="faq-answer" th:id="'faq-answer-' + ${faq.id}" th:text="${faq.content}"
+                     >답변 내용</div>
+            </div>
+        </section>
+
+    </div>
+    <script>
+        function toggleFaq(id) {
+            const el = document.getElementById('faq-answer-' + id);
+            el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+        }
+    </script>
+</div>
+</body>
+</html>

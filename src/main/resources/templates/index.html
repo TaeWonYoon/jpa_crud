@@ -17,41 +17,71 @@
 
             <!-- 🔷 div 1: 소개 카드뷰 (한 줄에 3개) -->
             <section class="intro-section">
-                <h2>소개 카드</h2>
+                <h2>소개</h2>
                 <div class="card-row">
-                    <div class="intro-card">
-                        <img src="/images/card1.jpg" alt="Card1">
-                        <h3>스프링부트란?</h3>
-                        <p>간편한 설정으로 빠르게 시작할 수 있는 자바 기반 프레임워크입니다.</p>
-                    </div>
-                    <div class="intro-card">
-                        <img src="/images/card2.jpg" alt="Card2">
-                        <h3>JPA란?</h3>
-                        <p>객체와 관계형 데이터베이스의 매핑을 도와주는 ORM 기술입니다.</p>
-                    </div>
-                    <div class="intro-card">
-                        <img src="/images/card3.jpg" alt="Card3">
-                        <h3>Thymeleaf란?</h3>
-                        <p>HTML을 서버 사이드에서 동적으로 렌더링할 수 있는 템플릿 엔진입니다.</p>
+                    <div class="intro-card" th:each="introduction, iterStat : ${introductionList}">
+                        <img th:if="${!#lists.isEmpty(introduction.files)}"
+                             th:src="@{'/uploads/introduction/' + ${introduction.files[0].fileName}}"
+                             height="150"
+                             alt="썸네일" />
+                        <h3 th:text="${introduction.title}">제목</h3>
+                        <p th:text="${introduction.content}">
+                        </p>
+                        <a th:href="${introduction.hrefUrl}" th:text="${introduction.hrefUrl}">이동 URL</a>
                     </div>
                 </div>
             </section>
 
             <!-- 🔷 div 2: 게시글 리스트 -->
-            <section class="post-section">
-                <h2>최근 게시글</h2>
-                <div class="post-list">
-                    <div class="post-box">
-                        <h4>게시글 제목1</h4>
-                        <p>게시글 내용 미리보기1</p>
-                    </div>
-                    <div class="post-box">
-                        <h4>게시글 제목2</h4>
-                        <p>게시글 내용 미리보기2</p>
-                    </div>
-                    <div class="more-link">
-                        <a th:href="@{/board/list}">+ 더보기</a>
-                    </div>
+            <section class="post-section" >
+                <h2>자유 게시글</h2>
+
+                <table class="table post-table">
+                    <thead>
+                    <tr>
+                        <th style="width: 10%;">번호</th>
+                        <th style="width: 30%;">제목</th>
+                        <th>내용</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="free, iterStat : ${freeList}">
+                        <td th:text="${iterStat.count}">1</td>
+                        <td>
+                            <a th:href="@{/board/view/{id}(id=${free.id})}" th:text="${free.title}">제목</a>
+                        </td>
+                        <td th:text="${#strings.abbreviate(free.content, 80)}">내용 미리보기</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="text-right mt-2">
+                    <a class="btn btn-sm btn-outline-secondary" th:href="@{/board/list}">+ 더보기</a>
+                </div>
+
+                <h2>FAQ 게시글</h2>
+
+                <table class="table post-table">
+                    <thead>
+                    <tr>
+                        <th style="width: 10%;">번호</th>
+                        <th style="width: 30%;">제목</th>
+                        <th>내용</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="faq, iterStat : ${faqList}">
+                        <td th:text="${iterStat.count}">1</td>
+                        <td>
+                            <a th:href="@{/board/view/{id}(id=${faq.id})}" th:text="${faq.title}">제목</a>
+                        </td>
+                        <td th:text="${#strings.abbreviate(faq.content, 80)}">내용 미리보기</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="text-right mt-2">
+                    <a class="btn btn-sm btn-outline-secondary" th:href="@{/board/faqList}">+ 더보기</a>
                 </div>
             </section>
 

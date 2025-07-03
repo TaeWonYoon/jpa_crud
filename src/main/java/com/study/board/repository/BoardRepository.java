@@ -15,6 +15,7 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
 
     @Query("SELECT b FROM BoardEntity b WHERE "
             + "b.deleteAt ='N' AND "
+            + "b.registTy ='free' AND "
             + "(:title IS NULL OR b.title LIKE %:title%) AND "
             + "(:title IS NULL OR b.title LIKE %:title%) AND "
             + "(:startDateTime IS NULL OR b.createdDate >= :startDateTime) AND "
@@ -26,4 +27,8 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
 
     //상세조회
     Optional<BoardEntity> findByIdAndDeleteAt(Long id, String deleteAt);
+
+
+    //faq 목록조회
+    Page<BoardEntity> findByDeleteAtAndRegistTy(String deleteAt, String registTy, Pageable pageable);
 }

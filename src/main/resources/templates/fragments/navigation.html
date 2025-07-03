@@ -1,13 +1,22 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<!-- templates/fragments/header.html -->
-<!-- fragments/navigation.html -->
-<nav class="sidebar" th:fragment="nav">
-  <ul>
-    <li><a th:href="@{/study/introduction}">스터디 소개</a></li>
-    <li><a th:href="@{/study/schedule}">일정 안내</a></li>
-    <li><a th:href="@{/study/resources}">학습 자료</a></li>
-    <li><a th:href="@{/study/contact}">문의하기</a></li>
+<!-- templates/fragments/adminNavigation.html -->
+<nav class="sidebar" th:fragment="admNav">
+  <ul class="nav flex-column">
+    <!-- 게시물관리 드롭다운 -->
+    <li class="nav-item">
+      <a class="nav-link collapsed i-border" data-bs-toggle="collapse"  onclick="subToggle('boardSubmenu')" role="button" aria-expanded="false" aria-controls="boardSubmenu">
+        게시물관리
+      </a>
+      <div class="collapse sb-all" id="boardSubmenu">
+        <ul class="nav flex-column ms-3">
+          <li class="nav-item" >
+            <a class="nav-link nav-c-g" id="freeBoardSubmenu" th:href="@{/board/list}"> ● 자유게시글 목록</a>
+          </li>
+          <li class="nav-item" >
+            <a class="nav-link nav-c-g" id="faqBoardSubmenu" th:href="@{/board/faqList}"> ● FAQ 목록</a>
+          </li>
+        </ul>
+      </div>
+    </li>
+
   </ul>
 </nav>
-</html>

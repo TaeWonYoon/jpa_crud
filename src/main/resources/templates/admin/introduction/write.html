@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
 <head>
-  <title>게시글 작성</title>
+  <title>소개글 작성</title>
 </head>
 <body>
 <div layout:fragment="content">
@@ -16,25 +16,83 @@
     <!-- 오른쪽 본문 -->
     <div class="container" style="padding-top: 80px; padding-bottom: 60px;">
       <section class="content">
-        <h2 class="mb-4">게시글 작성</h2>
+        <h2 class="mb-4">소개글 작성</h2>
 
-        <form th:action="@{/admin/introduction/write}"  th:object="${introduction}" method="post" enctype="multipart/form-data">
+        <form th:action="${introduction.id > 0} ?
+                  @{/admin/introduction/edit/{id}(id=${introduction.id})} :
+                  @{/admin/introduction/write}"
+              th:object="${introduction}"
+              method="post"
+              enctype="multipart/form-data">
+
+          <th:block th:if="${introduction.id > 0}">
+            <input type="hidden" name="_method" value="put"/>
+          </th:block>
+
           <div class="form-group">
-            <label for="title">제목</label>
+            <label class="form-label"><strong>제목</strong></label>
             <input type="text" class="form-control" th:field="*{title}" placeholder="제목을 입력하세요" required>
           </div>
 
           <div class="form-group">
-            <label for="content">내용</label>
+            <label class="form-label"><strong>내용</strong></label>
             <textarea class="form-control" th:field="*{content}" rows="8" placeholder="내용을 입력하세요" required></textarea>
           </div>
 
-          <!--
           <div class="form-group">
-            <label for="file">파일 첨부</label>
+            <label class="form-label"><strong>사용 여부</strong></label><br>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" th:field="*{useAt}" value="Y" id="useY">
+              <label class="form-check-label" for="useY">사용</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" th:field="*{useAt}" value="N" id="useN">
+              <label class="form-check-label" for="useN">미사용</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label"><strong>정렬 순서</strong></label>
+            <select class="form-control" th:field="*{sort}" id="sort">
+              <option th:value="1">1</option>
+              <option th:value="2">2</option>
+              <option th:value="3">3</option>
+              <option th:value="4">4</option>
+              <option th:value="5">5</option>
+              <!-- 필요시 숫자 더 추가 -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label"><strong>이동 URL</strong></label>
+            <input type="text" class="form-control" th:field="*{hrefUrl}" placeholder="이동할 URL을 입력하세요" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label"><strong>파일 첨부</strong></label>
             <input type="file" class="form-control-file" id="file" name="file">
           </div>
-          -->
+
+          <div class="form-group file-area" th:if="${introductionFile != null}">
+            <label class="form-label"><strong>첨부파일</strong></label>
+
+            <div th:if="${#strings.startsWith(introductionFile.fileExt.toLowerCase(), '.png') or
+                    #strings.startsWith(introductionFile.fileExt.toLowerCase(), '.jpg') or
+                    #strings.startsWith(introductionFile.fileExt.toLowerCase(), '.jpeg') or
+                    #strings.startsWith(introductionFile.fileExt.toLowerCase(), '.gif')}">
+              <img th:src="@{'/uploads/introduction/' + ${introductionFile.fileName}}"
+                   alt="이미지 미리보기"
+                   class="img-thumbnail"
+                   style="max-width: 300px; max-height: 300px;" />
+            </div>
+
+            <p class="mt-2">
+              <a th:href="@{'/files/download/' + ${introductionFile.id}}"
+                 th:text="${introductionFile.fileNameOrigin}"
+                 class="btn btn-link p-0">파일 다운로드</a> <span style="color:red;" th:onclick="'deleteFile(' + ${introductionFile.id} + ')'">[삭제]</span>
+            </p>
+          </div>
+
           <div class="text-right">
             <button type="submit" class="btn btn-primary">등록</button>
             <a th:href="@{/admin/introduction/list}" class="btn btn-secondary">목록</a>
@@ -43,6 +101,23 @@
       </section>
     </div>
   </div>
+  <script>
+    function deleteFile(id) {
+      if (!confirm("정말 파일을 삭제하시겠습니까?")) return;
+
+      $.ajax({
+        url: '/files/delete/' + id,
+        type: 'DELETE',
+        success: function () {
+          alert("파일이 삭제되었습니다.");
+          $('.file-area').remove(); // 파일 영역 제거
+        },
+        error: function () {
+          alert("파일 삭제에 실패했습니다.");
+        }
+      });
+    }
+  </script>
 </div>
 </body>
 </html>

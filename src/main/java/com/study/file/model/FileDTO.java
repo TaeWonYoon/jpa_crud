@@ -4,12 +4,14 @@ import com.study.file.entity.FileEntity;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class FileDTO {
     private Long id;
     private String tableName;
-    private String tableId;
+    private Long tableId;
     private String fileName;
     private String fileNameOrigin;
     private String fileExt;
@@ -20,6 +22,7 @@ public class FileDTO {
     private LocalDateTime updatedAt;
     private String deleteAt;
 
+    private List<FileDTO> files = new ArrayList<>();
     // 기본 생성자, getter/setter 등 생략
 
     // 엔티티 -> DTO 변환 메서드

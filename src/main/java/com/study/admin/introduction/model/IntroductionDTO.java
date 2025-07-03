@@ -1,12 +1,16 @@
 package com.study.admin.introduction.model;
 
 import com.study.admin.introduction.entity.IntroductionEntity;
+import com.study.file.model.FileDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ToString
 @AllArgsConstructor
@@ -26,17 +30,25 @@ public class IntroductionDTO {
     private LocalDateTime updatedDate;  // 수정일시 updated_date
     private String useAt; //사용여부
     private int sort; //정렬순서
+    private String hrefUrl; //이동할 url
+
+    private List<FileDTO> files;
 
     public static IntroductionDTO toIntroductionDto(IntroductionEntity entity) {
-        IntroductionDTO introductionDTO = new IntroductionDTO();
-        introductionDTO.setId(entity.getId());
-        introductionDTO.setTitle(entity.getTitle());
-        introductionDTO.setContent(entity.getContent());
-        introductionDTO.setCreatedId(entity.getCreatedId());
-        introductionDTO.setCreatedName(entity.getCreatedName());
-        introductionDTO.setUseAt(entity.getUseAt());
-        introductionDTO.setSort(entity.getSort());
-        introductionDTO.setDeleteAt("N");
-        return introductionDTO;
+        IntroductionDTO dto = new IntroductionDTO();
+        dto.setId(entity.getId());
+        dto.setTitle(entity.getTitle());
+        dto.setContent(entity.getContent());
+        dto.setCreatedId(entity.getCreatedId());
+        dto.setCreatedName(entity.getCreatedName());
+        dto.setUseAt(entity.getUseAt());
+        dto.setSort(entity.getSort());
+        dto.setDeleteAt(entity.getDeleteAt());
+        dto.setCreatedDate(entity.getCreatedDate());
+        dto.setUpdatedId(entity.getUpdatedId());
+        dto.setUpdatedName(entity.getUpdatedName());
+        dto.setUpdatedDate(entity.getUpdatedDate());
+        dto.setHrefUrl(entity.getHrefUrl());
+        return dto;
     }
 }

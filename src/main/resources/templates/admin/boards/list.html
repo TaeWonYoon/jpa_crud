@@ -22,7 +22,7 @@
 
         <section class="content">
             <!-- 1. 제목 헤더 -->
-            <h3 class="mb-3">게시글 리스트</h3>
+            <h3 class="mb-3" th:text="${registTy == 'free' ? '자유게시글 목록' : 'FAQ목록'} "></h3>
 
             <!-- 검색조건 테이블 -->
             <form>
@@ -71,7 +71,7 @@
                         <th>제목</th>
                         <th>작성자</th>
                         <th>작성일</th>
-                        <th>조회수</th>
+                        <th th:if="${registTy eq 'free'}">조회수</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -80,7 +80,7 @@
                         <td><a th:href="@{'/admin/boards/' + ${registTy} +'View/' + ${board.id}}" th:text="${board.title}">게시글 제목</a></td>
                         <td th:text="${board.authorName}">작성자</td>
                         <td th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd')}"></td>
-                        <td th:text="${board.views}">조회수</td>
+                        <td th:if="${registTy eq 'free'}" th:text="${board.views}">조회수</td>
                     </tr>
                 </tbody>
             </table>
