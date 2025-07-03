@@ -17,3 +17,7 @@
 <p> 자바 : 17.0.15 </p>
 <p> 스프링부트 : '3.5.0' </p>
 <p> mysql : '8.0' </p>
+
+
+<a href="./SQL.md" target="_blank">DDL 보기</a> <br/>
+<a href="./JPA_CRUD.pdf" target="_blank">작업 내용보기</a> <br/>
